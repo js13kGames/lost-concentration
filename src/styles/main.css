@@ -1,0 +1,21 @@
+html, body, h1, h2 {
+	font-family: sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+.hidden {
+  display: none !important;
+}
