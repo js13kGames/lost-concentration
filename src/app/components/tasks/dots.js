@@ -62,7 +62,6 @@ export default function(iIndex, fSignal) {
 	let _nextDotIndex = 0;
 	let _dotStatus = STATUS_NONE;
 	let _levelInfo = Engine.getLevelInfo('dots', _nextLevel++);
-	let _tries = _levelInfo.tries
 
 	function _handleClick(oEvt) {
 		let sClass;
@@ -84,14 +83,9 @@ export default function(iIndex, fSignal) {
 	}
 
 	return {
+		attempt: 1,
 		dom: null,
-		points: _levelInfo.points,
-		// tries: iIndex === 0 ? _levelInfo.tries - 1 : _levelInfo.tries,
-		tries: _levelInfo.tries + 0,
-
-		// getTries() {
-		// 	return _levelInfo.points
-		// },
+		levelInfo: _levelInfo,
 
 		remove() {
 			_dots.forEach(dDot => dDot.removeEventListener('click', _handleClick));

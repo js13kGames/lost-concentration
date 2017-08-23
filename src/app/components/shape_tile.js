@@ -3,6 +3,7 @@ import Svg from '../svg'
 
 const HIDE = 'opacity:0;';
 const SHOW = 'opacity:.99';
+const HIGHLIGHT = 'background:#FFFFFF;';
 
 
 const _class = {
@@ -17,17 +18,26 @@ const _class = {
 	})
 }
 
-// Create(oTile, iIndex, fSignal)
-// Creates a component ...
-// 		oTile		- ...
+// Create(oTile, iIndex, bToggle, fSignal)
+// Creates a component which displays a tile with a colored shape.
+// 		oTile		- Object with color and shape properties for tile.
+// 		iIndex	- ...
+// 		bToggle	- Tiles toggle when clicked (for memory task).
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
-export default function(oTile, iIndex, fSignal) {
+export default function(oTile, iIndex, bToggle, fSignal) {
 	let _self, _shape;
 
 	function _handleClick(oEvt) {
-		_shape.setAttribute('style', SHOW);
-		fSignal('selected', Object.assign({index:iIndex}, oTile));
+		if (bToggle) {
+			_shape.setAttribute('style', SHOW);
+		} else {
+			_shape.setAttribute('style', HIGHLIGHT);
+		}
+
+		if (fSignal) {
+			fSignal('selected', Object.assign({index:iIndex}, oTile));
+		}
 	}
 	
 	return {
@@ -43,10 +53,14 @@ export default function(oTile, iIndex, fSignal) {
 
 		render() {
 			_self = this;
-			_shape = Dom.div(_class.shape, {style:HIDE}, Svg.shape(oTile.shape, oTile.color));
+			_shape = Dom.div(_class.shape, {style:bToggle ? HIDE : SHOW}, Svg.shape(oTile.shape, oTile.color));
 
 			this.dom = Dom.div(_class.base, {click:_handleClick}, _shape);
 			return this.dom;
+		},
+
+		show() {
+			_shape.setAttribute('style', SHOW);
 		},
 
 		// update(iCounter) {

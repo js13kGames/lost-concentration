@@ -1,11 +1,13 @@
 import Loop from './loop.js'
 import Levels from './levels.js'
 
-const _taskTypes = ['dots', 'memory', 'subtract'];
+// const _taskTypes = ['dots', 'math', 'memory', 'same', 'subtract'];
+const _taskTypes = ['dots', 'memory', 'same', 'subtract'];
 
 let _points, _stage;
 let _count = 0;
 let _firstTask = true;
+let _levels = [];
 let _nextTypeIndex = 0;
 let _score = 0;
 
@@ -20,8 +22,6 @@ function _update(nDelta) {
 export default {
 	// END_LEVEL: 0,
 	GAME_OVER: 0,
-
-	// UNIT: document.body.clientHeight <= document.body.clientWidth ? 'vh' : 'vw',
 
 	// currentLevel
 	// ...
@@ -46,32 +46,24 @@ console.log('+++', iAmount, _score);
 	// getLevelInfo(sTask, iLevel)
 	// ...
 	getLevelInfo(sTask, iLevel) {
-		let oRet = {};
-		let oLevel = Levels[sTask];
+		let oPrev;
 
-		--iLevel;
-
-		Object.keys(oLevel).forEach(sKey => {
-			let vVal = oLevel[sKey];
-			let sType = typeof vVal;
-
-			if (sType === 'object') {
-				if (vVal.step > 0) {
-					oRet[sKey] = Math.min(vVal.max, Math.floor(vVal.min + vVal.step * iLevel));
+console.log(sTask, iLevel);
+		if (!_levels[sTask]) {
+			_levels[sTask] = Levels[sTask].map((oLvl, iNdx) => {
+				if (iNdx === 0) {
+					oPrev = oLvl;
 				} else {
-					oRet[sKey] = Math.max(vVal.min, Math.ceil(vVal.max + vVal.step * iLevel));
+					oPrev = Object.assign({}, oPrev);
+					Object.keys(oLvl).forEach(sKey => {
+						oPrev[sKey] = oLvl[sKey];
+					});
 				}
-			} else {
-				oRet[sKey] = vVal;
-			}
-		});
-
-		if (_firstTask) {
-			_firstTask = false;
-			--oRet.tries;
+				return oPrev;
+			});
 		}
 
-		return oRet;
+		return _levels[sTask][iLevel - 1];
 	},
 
 
@@ -93,8 +85,8 @@ console.log('+++', iAmount, _score);
 	// 		iIndex	- Index of the secondary task area (0:UpperLeft, 1:UpperRight, 2:LowerLeft, 3:LowerRight).
 	// Returns a string with the type of secondary task ("dots|...").
 	nextTaskType(iIndex) {
-		return _taskTypes[_nextTypeIndex++ % 3];
-		// return 'memory';
+		return _taskTypes[_nextTypeIndex++ % _taskTypes.length];
+		// return 'math';
 	},
 
 
@@ -136,6 +128,19 @@ console.log('+++', iAmount, _score);
 			aTgt[i] = aTgt[iRnd];
 			aTgt[iRnd] = vSwap;
 		}
+	},
+
+
+	// randomNot(iMin, iMax, aEx)
+	// ...
+	randomNot(iMin, iMax, aEx) {
+		let iRet;
+
+		do {
+			iRet = Math.floor(Math.random() * (iMax - iMin + 1) + iMin);
+		} while (aEx.indexOf(iRet) >= 0);
+
+		return iRet;
 	},
 
 

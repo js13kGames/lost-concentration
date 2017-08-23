@@ -20,6 +20,17 @@ const _class = {
 		'transition': 'transform 1s ease-in-out',
 		'z-index': '9999'
 	}),
+	time: Dom.addStyle('$main-pointer-time', {
+		'background': '#F0F0F0',
+		'border-bottom': '0= solid #008000',
+		'border-left': '0= solid transparent',
+		'border-radius': '0=',
+		'border-right': '0= solid #008000',
+		'border-top': '0= solid #008000',
+		'display': 'flex',
+		'justify-content': 'center',
+		'position': 'absolute',
+	}),
 };
 
 
@@ -28,7 +39,8 @@ const _class = {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(fSignal) {
-	let _self;
+	let _extra, _self;
+	let _extraTime = 0;
 	let _rotation = 45;
 	let _rotateAt = TMP_SWITCH_TIME;
 
@@ -40,23 +52,38 @@ export default function(fSignal) {
 	return {
 		dom: null,
 
-		next() {
+		next(bExtra) {
+			if (bExtra) {
+			_extraTime = Math.max(0, Math.min(1000, _extraTime + (_rotateAt - Engine.getCounter())));
+			}
 			_rotateAt = 0;
 		},
 
 		render() {
 			_self = this;
-			this.dom = Dom.div(_class.base, {style:'transform:rotate(45deg)', click:_handleClick});
+			_extra = Dom.div(_class.time, null);
+
+			this.dom = Dom.div(_class.base, {style:'transform:rotate(45deg)', click:_handleClick}, _extra);
+
 			return this.dom;
 		},
 
 		update(iCounter) {
-			// if (iCounter % TMP_SWITCH_TIME === 0) {
 			if (iCounter >= _rotateAt) {
 				_rotateAt = iCounter + TMP_SWITCH_TIME;
 				_rotation += 90;
+				if (_extraTime) {
+
+					_rotateAt = iCounter + TMP_SWITCH_TIME + _extraTime;
+				}
+
 				_self.dom.setAttribute('style', `transform:rotate(${_rotation}deg)`);
 				fSignal('next', (_rotation % 360 - 45) / 90);
+			} else if (_extraTime) {
+				let iExtra = _extraTime / 100;
+				_extra.setAttribute('style', `border-width:${iExtra}${Dom.UNIT};border-radius:${iExtra}${Dom.UNIT};`);
+				--_extraTime;
+			} else if (iCounter >= _rotateAt) {
 			}
 		}
 	};

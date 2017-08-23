@@ -1,18 +1,14 @@
-import Engine from '../engine.js'
-import Dom from '../dom.js'
-import Dots from './tasks/dots.js'
-import Memory from './tasks/memory.js'
-import Subtract from './tasks/subtract.js'
+import Engine from '../engine'
+import Dom from '../dom'
+import Dots from './tasks/dots'
+import Math from './tasks/math'
+import Memory from './tasks/memory'
+import Same from './tasks/same'
+import Subtract from './tasks/subtract'
+import Attempts from '../components/attempt_indicator'
 
 const ACTIVE = 'opacity:0;transition-delay:.8s;z-index:-99;';
 const INACTIVE = 'opacity:0.6;transition-delay:0s;z-index:99;';
-
-const _countStyles = [
-	'left:4px;top:4px;',
-	'right:4px;top:4px;',
-	'bottom:4px;right:4px;',
-	'bottom:4px;left:4px;'
-];
 
 const _class = {
 	base: Dom.addStyle('$task-window', {
@@ -41,10 +37,6 @@ const _class = {
 		'position': 'absolute',
 		'width': '100%',
 		'z-index': '100'
-	}),
-	count: Dom.addStyle('$task-count', {
-		'font-size': 4,
-		'position': 'absolute'
 	})
 };
 
@@ -55,9 +47,11 @@ function _createTask(iIndex, fSignal) {
 
 	switch (sType) {
 		case 'dots':			return Dots(iIndex, fSignal);
+		case 'math':			return Math(iIndex, fSignal);
 		case 'memory':		return Memory(iIndex, fSignal);
+		case 'same':			return Same(iIndex, fSignal);
 		case 'subtract':	return Subtract(iIndex, fSignal);
-		default:			throw new Error('Invalid task type');
+		default:					throw new Error('Invalid task type');
 	}
 }
 
@@ -69,18 +63,18 @@ function _createTask(iIndex, fSignal) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(bActive, iIndex, fSignal) {
-	let _completed, _domBack, _domComp, _domCount, _self, _task;
+	let _attempt, _completed, _domBack, _domComp, _self, _task;
 
-	function _handleSignal(sSignal) {
-		console.log('Signal', sSignal);
+	function _handleSignal(sSignal, vData) {
 		if (sSignal === 'solved') {
-			_self.dom.removeChild(_task.dom);
-			_task.remove();
+			let mTask = _task;
+			_task = null;
+			_self.dom.removeChild(mTask.dom);
+			mTask.remove();
 			_domComp.classList.remove('hidden');
 			_completed = true;
-			Engine.adjustScore(_task.points);
-			_task = null;
-			fSignal(sSignal);
+			Engine.adjustScore(mTask.levelInfo.points * (mTask.levelInfo.attempts - mTask.attempt + 1));
+			fSignal(sSignal, mTask.attempt === 1);
 		}
 	}
 
@@ -96,14 +90,13 @@ export default function(bActive, iIndex, fSignal) {
 					_domComp.classList.add('hidden');
 					_task = _createTask(iIndex, _handleSignal);
 					_self.dom.appendChild(_task.render());
-					_domCount.innerText = _task.tries;
+					_attempt.setAttempt(1);
 				}
-
 				_domBack.setAttribute('style', ACTIVE);
-				_domCount.innerText = --_task.tries;
 			} else if (_task) {
 				_domBack.setAttribute('style', INACTIVE);
-				if (_task.tries === 0) {
+				_attempt.setAttempt(++_task.attempt);
+				if (_task.attempt > _task.levelInfo.attempts) {
 					Engine.stop(Engine.GAME_OVER);
 				}
 			}
@@ -116,12 +109,12 @@ export default function(bActive, iIndex, fSignal) {
 		render() {
 			_self = this;
 			_task = _createTask(iIndex, _handleSignal);
+			_attempt = Attempts(_task.levelInfo.attempts, iIndex);
 
 			_domBack = Dom.div(_class.backdrop, {style:bActive ? ACTIVE : INACTIVE});
 			_domComp = Dom.div([_class.complete, 'hidden'], null, 'COMPLETE!');
-			_domCount = Dom.div(_class.count, {style:_countStyles[iIndex]}, _task.tries);
 			
-			this.dom = Dom.div(_class.base, null, [_domCount, _task, _domBack, _domComp]);
+			this.dom = Dom.div(_class.base, null, [_attempt, _task, _domBack, _domComp]);
 
 			return this.dom;
 		},

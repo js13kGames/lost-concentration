@@ -87,9 +87,9 @@ export default function(iIndex, fSignal) {
 	}
 
 	return {
+		attempt: 1,
 		dom: null,
-		points: _levelInfo.points,
-		tries: _levelInfo.tries,
+		levelInfo: _levelInfo,
 
 		remove() {
 			_inputs.remove();

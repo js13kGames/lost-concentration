@@ -1,6 +1,6 @@
 import Engine from '../../engine'
 import Dom from '../../dom'
-import Tile from '../memory_tile'
+import Tile from '../shape_tile'
 
 const HIDE_TIME = 60;
 const REMOVE_TIME = 20;
@@ -59,7 +59,7 @@ function _createTiles(iCount, fSignal) {
 		aRet = [].concat(aRet.slice(0, iMax), null, aRet.slice(iMax));
 	}
 
-	return aRet.map((oTile, iNdx) => oTile ? Tile(oTile, iNdx, fSignal) : '');
+	return aRet.map((oTile, iNdx) => oTile ? Tile(oTile, iNdx, true, fSignal) : '');
 }
 
 
@@ -69,7 +69,7 @@ function _createTiles(iCount, fSignal) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _hideTime, _removeTime, _self;
+	let _hideTime;
 	let _levelInfo = Engine.getLevelInfo('memory', _nextLevel++);
 	let _tiles = _createTiles(_levelInfo.cols * _levelInfo.rows, _handleSignal);
 	let _selections = [];
@@ -82,14 +82,12 @@ export default function(iIndex, fSignal) {
 
 		if (_selections.length === 2) {
 			if (_selections[0].shape === _selections[1].shape && _selections[0].color === _selections[1].color) {
-console.log('SAME');
 				_selections[0].time = Engine.getCounter() + REMOVE_TIME;
 				_remove = _remove.concat(_selections)
 				if (++_found === Math.floor(_levelInfo.cols * _levelInfo.rows / 2)) {
 					fSignal('solved');
 				}
 			} else {
-console.log('DIFFERENT');
 				_hideTime = Engine.getCounter() + HIDE_TIME;
 				_hide = _hide.concat(_selections);
 			}
@@ -106,9 +104,9 @@ console.log('DIFFERENT');
 	}
 
 	return {
+		attempt: 1,
 		dom: null,
-		points: _levelInfo.points,
-		tries: _levelInfo.tries + 0,
+		levelInfo: _levelInfo,
 
 		remove() {
 			_tiles.forEach(mTile => {
@@ -122,7 +120,6 @@ console.log('DIFFERENT');
 			let iIndex = 0;
 			let aRows = [];
 
-			_self = this;
 			for (let iRow = 0; iRow < _levelInfo.rows; ++iRow) {
 				let aCols = [];
 

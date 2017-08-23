@@ -33,8 +33,8 @@ export default function() {
 			_tasks[_oldIndex].active(false);
 			_tasks[vData].active(true);
 			_oldIndex = (_oldIndex + 1) % 4;
-		} else {
-			_pointer.next();
+		} else if (sSignal === 'solved') {
+			_pointer.next(vData);
 		}
 	}
 
