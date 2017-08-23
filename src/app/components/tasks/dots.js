@@ -1,5 +1,5 @@
-import Engine from '../../engine.js'
-import Dom from '../../dom.js'
+import Engine from '../../engine'
+import Dom from '../../dom'
 
 const STATUS_NONE = 0;
 const STATUS_SET = 1;

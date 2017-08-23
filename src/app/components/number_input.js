@@ -1,5 +1,5 @@
-import Dom from '../dom.js'
-import Digit from './digit_input.js'
+import Dom from '../dom'
+import Digit from './digit_input'
 
 const _class = Dom.addStyle('$number-input', 'display:flex;position:relative;');
 

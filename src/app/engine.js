@@ -1,8 +1,8 @@
-import Loop from './loop.js'
-import Levels from './levels.js'
+import Loop from './loop'
+import Levels from './levels'
 
-// const _taskTypes = ['dots', 'math', 'memory', 'same', 'subtract'];
-const _taskTypes = ['dots', 'memory', 'same', 'subtract'];
+const _taskTypes = ['dots', 'math', 'memory', 'same', 'subtract'];
+// const _taskTypes = ['dots', 'memory', 'same', 'subtract'];
 
 let _points, _stage;
 let _count = 0;
@@ -86,7 +86,7 @@ console.log(sTask, iLevel);
 	// Returns a string with the type of secondary task ("dots|...").
 	nextTaskType(iIndex) {
 		return _taskTypes[_nextTypeIndex++ % _taskTypes.length];
-		// return 'math';
+		// return 'same';
 	},
 
 
@@ -118,16 +118,20 @@ console.log(sTask, iLevel);
 	},
 
 
-	// randomize(aTgt)
+	// randomize(aSrc[, bCopy])
 	// ...
-	randomize(aTgt) {
-		for (let i = 0, l = aTgt.length; i < l; ++i) {
-			let iRnd = this.randomInt(0, l - 1);
-			let vSwap = aTgt[i];
+	randomize(aSrc, bCopy) {
+		let aRet = bCopy ? aSrc.slice() : aSrc;
 
-			aTgt[i] = aTgt[iRnd];
-			aTgt[iRnd] = vSwap;
+		for (let i = 0, l = aRet.length; i < l; ++i) {
+			let iRnd = this.randomInt(0, l - 1);
+			let vSwap = aRet[i];
+
+			aRet[i] = aRet[iRnd];
+			aRet[iRnd] = vSwap;
 		}
+
+		return aRet;
 	},
 
 

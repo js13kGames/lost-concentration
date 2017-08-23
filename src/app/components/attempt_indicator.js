@@ -1,4 +1,4 @@
-import Dom from '../dom.js'
+import Dom from '../dom'
 
 const _styles = [
 	'left:4px;top:4px;',

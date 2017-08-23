@@ -26,15 +26,17 @@ export default {
 	UNIT: document.body.clientHeight <= document.body.clientWidth ? 'vh' : 'vw',
 
 
-	// addStyle(sSelector, vRules)
+	// addStyle(sSelector, vRules[, oPseudo])
 	// Adds a new style rule to a global css stylesheet.
 	// 		sSelector	- Selector for the new rule (e.g. '.my-class'). If first character is a dollar sign ($), a new class 
 	// 								selector is generated using the pattern "d{index}" where index is a value which starts at 1 and is 
 	// 								incremented every time a new selector is generated. This allows the system to generate short class 
 	// 								names which are guaranteed to be unique.
 	// 		vRules		- Object or string with rules for the style.
+	// 		oPseudo		- [null] Additional generic object for defining pseudo classes for the class. The object's keys are 
+	// 								the pseudo class names and the values are the rules.
 	// Returns the selector used for the new rule which may be different from the one supplied (if $ prepended).
-	addStyle(sSelector, vRules) {
+	addStyle(sSelector, vRules, oPseudo) {
 		let sRet = sSelector;
 		let bScoped = (sRet.charAt(0) === '$');
 		let dStyle = document.getElementById('dynamicStylesheet');
@@ -59,6 +61,12 @@ export default {
 			(dStyle.styleSheet || dStyle.sheet).addRule(sRet, sRules);
 		} else {
 			dStyle.sheet.insertRule(`${sRet}{${sRules}}`, 0);
+		}
+
+		if (oPseudo) {
+			Object.keys(oPseudo).forEach(sKey => {
+				this.addStyle(sRet + sKey, oPseudo[sKey]);
+			});
 		}
 
 		return bScoped ? sRet.substr(1) : sRet;

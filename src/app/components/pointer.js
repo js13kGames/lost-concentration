@@ -1,5 +1,5 @@
-import Engine from '../engine.js'
-import Dom from '../dom.js'
+import Engine from '../engine'
+import Dom from '../dom'
 
 const TMP_SWITCH_TIME = 600;//!!!
 

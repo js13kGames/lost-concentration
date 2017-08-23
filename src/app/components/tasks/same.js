@@ -70,12 +70,14 @@ export default function(iIndex, fSignal) {
 		if (!_first) {
 			_first = oData;
 		} else {
-			if (oData.shape === _first.shape && oData.color === _first.color) {
-				fSignal('solved');
-			} else {
-				_first = null;
-				_tiles[oData.index].show();
-				_tiles[_first.index].show();
+			if (_first.index !== oData.index) {
+				if (oData.shape === _first.shape && oData.color === _first.color) {
+					fSignal('solved');
+				} else {
+					_tiles[oData.index].show();
+					_tiles[_first.index].show();
+					_first = null;
+				}
 			}
 		}
 	}

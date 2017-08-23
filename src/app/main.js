@@ -1,4 +1,4 @@
-import Engine from './engine.js'
-import Stage from './components/stage.js'
+import Engine from './engine'
+import Stage from './components/stage'
 
 Engine.init(Stage());

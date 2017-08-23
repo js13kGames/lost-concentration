@@ -1,7 +1,6 @@
-// import Engine from '../engine.js'
-import Dom from '../dom.js'
-import Pointer from './pointer.js'
-import Window from './task_window.js'
+import Dom from '../dom'
+import Pointer from './pointer'
+import Window from './task_window'
 
 const _class = {
 	base: Dom.addStyle('$main-stage', {

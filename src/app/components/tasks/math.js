@@ -1,8 +1,8 @@
 import Engine from '../../engine'
 import Dom from '../../dom'
 import Svg from '../../svg'
+import Key from '../keypad_input'
 
-const NUM_LINES = 3;
 const COLORS = ['#FF0000', '#00C000', '#0000FF', '#FF00FF', '#808000', '#8000880', '#008080', '#FF8080'];
 const SHAPES = ['gear', 'octagon', 'pacman', 'pentagon', 'ring', 'star', 'triangleDown', 'triangleUp'];
 
@@ -36,7 +36,14 @@ const _class = {
 	}),
 	symbol: Dom.addStyle('$math-symbol', {
 		// 'color': 'red',
+		'display': 'flex',
 		'font-size': 6
+	}),
+	answer: Dom.addStyle('$math-answer', {
+		'border': '2px solid black',
+		'font-size': 6,
+		'height': 6,
+		'min-width': 10
 	})
 };
 
@@ -83,55 +90,76 @@ function _generateLine(iIndex, aShapes, aColors, aValues) {
 
 // _generatePuzzle(oLevel)
 function _generatePuzzle(oLevel) {
-	let aRet = [];
-	let aShapes = Engine.randomItems(SHAPES, NUM_LINES);
-	let aColors = Engine.randomItems(COLORS, NUM_LINES);
-	let aValues = Engine.randomItems(_arrayFromTo(oLevel.min, oLevel.max), NUM_LINES);
+	let oQst;
+	let oRet = {dom:[]};
+	let aShapes = Engine.randomItems(SHAPES, oLevel.lines);
+	let aColors = Engine.randomItems(COLORS, oLevel.lines);
+	let aValues = Engine.randomItems(_arrayFromTo(oLevel.min, oLevel.max), oLevel.lines);
 
-// debugger;
-	for (let i = 0; i < NUM_LINES; ++i) {
+	for (let i = 0; i < oLevel.lines; ++i) {
 		let aLine = _generateLine(i, aShapes, aColors, aValues);
-		aRet.push(Dom.div(_class.line, null, aLine));
+		oRet.dom.push(Dom.div(_class.line, null, aLine));
 	}
 
-	aRet.push(_generateQuestion(oLevel.ops, aShapes, aColors, aValues));
+	oQst = _generateQuestion(oLevel.ops, aShapes, aColors, aValues);
+	oRet.dom.push(oQst.dom);
+	oRet.answerBox = oQst.answerBox;
+	oRet.solution = oQst.solution;
 
-	return aRet;
+	return oRet;
 }
 
 
 // _generateQuestion()
 function _generateQuestion(sOps, aShapes, aColors, aValues) {
-	let iRes;
+	let iSol, aLine, dAnsw;
+	let aVals = Engine.randomize(aValues, true);
 
 	function __char(vChr) {
-		let sType = typeof vChr;
+		let iIndex, sType = typeof vChr;
 
-		if (sType === 'number') {1
-			return _shape(aShapes[vChr], aColors[vChr]);
+		if (sType === 'number') {
+			iIndex = aValues.indexOf(aVals[vChr]);
+			return _shape(aShapes[iIndex], aColors[iIndex]);
 		} else if (sType === 'string') {
 			return Dom.div(_class.symbol, null, vChr);
 		} else {
-			return Dom.div(_class.symbol, null, iRes);
+			dAnsw = Dom.div(_class.answer, null, '');
+			return Dom.div(_class.symbol, null, ['=', dAnsw]);
 		}
 	}
 
 	switch (sOps) {
-		case '++':
-			iRes = aValues[0] + aValues[1] + aValues[2];
+		case '+':
+			iSol = aVals[0] + aVals[1];
+			aLine = [__char(0), __char('+'), __char(1), __char(true)]
 			break;
-		case '+x':
-			iRes = aValues[0] + aValues[1] * aValues[2];
+		case 'x':
+			iSol = aVals[0] * aVals[1];
+			aLine = [__char(0), __char('\u00D7'), __char(1), __char(true)]
+			break;
+		case '++':
+			iSol = aVals[0] + aVals[1] + aVals[2];
+			aLine = [__char(0), __char('+'), __char(1), __char('+'), __char(2), __char(true)]
 			break;
 		case 'x+':
-			iRes = aValues[0] * aValues[1] + aValues[2];
+			if (Engine.randomInt(1, 100) <= 50) {
+				iSol = aVals[0] + aVals[1] * aVals[2];
+				aLine = [__char(0), __char('+'), __char(1), __char('\u00D7'), __char(2), __char(true)]
+			} else {
+				iSol = aVals[0] * aVals[1] + aVals[2];
+				aLine = [__char(0), __char('\u00D7'), __char(1), __char('+'), __char(2), __char(true)]
+			}
 			break;
 		default:
 			throw new Error('Invalid Ops!');
 	}
 
-	return Dom.div(_class.line, null,
-			[__char(0), __char(sOps.charAt(0)), __char(1), __char(sOps.charAt(1)), __char(2), __char(true)]);
+	return {
+		dom: Dom.div(_class.line, null, aLine),
+		answerBox: dAnsw,
+		solution: iSol
+	};
 }
 
 
@@ -147,21 +175,22 @@ function _shape(sShape, sColor) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
+	let _keypad;
 	let _levelInfo = Engine.getLevelInfo('math', _nextLevel++);
 	let _puzzle = _generatePuzzle(_levelInfo);
 
+	function _handleClick(oEvt) {
+		_keypad.show();
+	}
+
 	function _handleSignal(sSignal, oData) {
-		// if (!_first) {
-		// 	_first = oData;
-		// } else {
-		// 	if (oData.shape === _first.shape && oData.color === _first.color) {
-		// 		fSignal('solved');
-		// 	} else {
-		// 		_first = null;
-		// 		_tiles[oData.index].show();
-		// 		_tiles[_first.index].show();
-		// 	}
-		// }
+		if (sSignal === 'changed') {
+			if (oData === _puzzle.solution) {
+				fSignal('solved');
+			} else {
+				_puzzle.answerBox.setAttribute('style', 'color:red;');
+			}
+		}
 	}
 
 	return {
@@ -170,11 +199,13 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
-
+			this.dom.removeEventListener('click', _handleClick);
 		},
 
 		render() {
-			this.dom = Dom.div(_class.base, null, Dom.div(_class.puzzle, null, _puzzle));
+			_keypad = Key(_puzzle.answerBox, _handleSignal);
+
+			this.dom = Dom.div(_class.base, null, Dom.div(_class.puzzle, {click:_handleClick}, [_puzzle.dom, _keypad]));
 
 			return this.dom;
 		},

@@ -1,4 +1,4 @@
-import Dom from '../dom.js'
+import Dom from '../dom'
 
 const _class = {
 	base: Dom.addStyle('$digit-input', {

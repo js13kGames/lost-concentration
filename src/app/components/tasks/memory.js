@@ -81,15 +81,19 @@ export default function(iIndex, fSignal) {
 		_selections.push(oData)
 
 		if (_selections.length === 2) {
-			if (_selections[0].shape === _selections[1].shape && _selections[0].color === _selections[1].color) {
-				_selections[0].time = Engine.getCounter() + REMOVE_TIME;
-				_remove = _remove.concat(_selections)
-				if (++_found === Math.floor(_levelInfo.cols * _levelInfo.rows / 2)) {
-					fSignal('solved');
-				}
+			if (_selections[0].index === _selections[1].index) {
+				_selections.pop();
 			} else {
-				_hideTime = Engine.getCounter() + HIDE_TIME;
-				_hide = _hide.concat(_selections);
+				if (_selections[0].shape === _selections[1].shape && _selections[0].color === _selections[1].color) {
+					_selections[0].time = Engine.getCounter() + REMOVE_TIME;
+					_remove = _remove.concat(_selections)
+					if (++_found === Math.floor(_levelInfo.cols * _levelInfo.rows / 2)) {
+						fSignal('solved');
+					}
+				} else {
+					_hideTime = Engine.getCounter() + HIDE_TIME;
+					_hide = _hide.concat(_selections);
+				}
 			}
 
 			_selections = [];

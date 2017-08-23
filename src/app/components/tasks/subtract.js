@@ -1,6 +1,6 @@
-import Engine from '../../engine.js'
-import Dom from '../../dom.js'
-import Input from '../number_input.js'
+import Engine from '../../engine'
+import Dom from '../../dom'
+import Input from '../number_input'
 
 const _class = {
 	base: Dom.addStyle('$task-subtract', {
