@@ -1,8 +1,6 @@
 import Loop from './loop'
 import Levels from './levels'
 
-const _taskTypes = ['dots', 'math', 'memory', 'same', 'subtract'];
-// const _taskTypes = ['dots', 'memory', 'same', 'subtract'];
 
 let _points, _stage;
 let _count = 0;
@@ -10,6 +8,7 @@ let _firstTask = true;
 let _levels = [];
 let _nextTypeIndex = 0;
 let _score = 0;
+let _taskTypes = ['dots', 'math', 'memory', 'repeat', 'same', 'subtract'];
 
 
 // _update(nDelta)
@@ -48,7 +47,6 @@ console.log('+++', iAmount, _score);
 	getLevelInfo(sTask, iLevel) {
 		let oPrev;
 
-console.log(sTask, iLevel);
 		if (!_levels[sTask]) {
 			_levels[sTask] = Levels[sTask].map((oLvl, iNdx) => {
 				if (iNdx === 0) {
@@ -85,16 +83,30 @@ console.log(sTask, iLevel);
 	// 		iIndex	- Index of the secondary task area (0:UpperLeft, 1:UpperRight, 2:LowerLeft, 3:LowerRight).
 	// Returns a string with the type of secondary task ("dots|...").
 	nextTaskType(iIndex) {
-		return _taskTypes[_nextTypeIndex++ % _taskTypes.length];
-		// return 'same';
+		return _taskTypes.splice(this.randomInt(0, _taskTypes.length - 1), 1)[0];
+		// return _taskTypes[_nextTypeIndex++ % _taskTypes.length];
+		// return 'repeat';
 	},
 
 
-	// randomInt(iMin, iMax])
+	// randomInt(iMin, iMax)
 	// ...
 	randomInt(iMin, iMax) {
 		return Math.floor(Math.random() * (iMax - iMin + 1) + iMin);
 	},
+
+
+	// // randomInts(iMin, iMax, iCount)
+	// // ...
+	// randomInts(iMin, iMax, iCount) {
+	// 	let aRet = [];
+
+	// 	for (let i = 0; i < iCount; ++i) {
+	// 		aRet.push(Math.floor(Math.random() * (iMax - iMin + 1) + iMin));
+	// 	}
+
+	// 	return aRet;
+	// },
 
 
 	// // randomItem(aSrc)
@@ -145,6 +157,13 @@ console.log(sTask, iLevel);
 		} while (aEx.indexOf(iRet) >= 0);
 
 		return iRet;
+	},
+
+
+	// returnTypeToPool(sType)
+	// ...
+	returnTypeToPool(sType) {
+		_taskTypes.push(sType);
 	},
 
 

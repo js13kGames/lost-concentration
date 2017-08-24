@@ -3,6 +3,7 @@ import Dom from '../dom'
 import Dots from './tasks/dots'
 import Math from './tasks/math'
 import Memory from './tasks/memory'
+import Repeat from './tasks/repeat'
 import Same from './tasks/same'
 import Subtract from './tasks/subtract'
 import Attempts from '../components/attempt_indicator'
@@ -43,16 +44,22 @@ const _class = {
 
 // _createTask(iIndex, fSignal)
 function _createTask(iIndex, fSignal) {
+	let mRet;
 	let sType = Engine.nextTaskType(iIndex);
 
 	switch (sType) {
-		case 'dots':			return Dots(iIndex, fSignal);
-		case 'math':			return Math(iIndex, fSignal);
-		case 'memory':		return Memory(iIndex, fSignal);
-		case 'same':			return Same(iIndex, fSignal);
-		case 'subtract':	return Subtract(iIndex, fSignal);
+		case 'dots':			mRet = Dots(iIndex, fSignal); break;
+		case 'math':			mRet = Math(iIndex, fSignal); break;
+		case 'memory':		mRet = Memory(iIndex, fSignal); break;
+		case 'repeat':		mRet = Repeat(iIndex, fSignal); break;
+		case 'same':			mRet = Same(iIndex, fSignal); break;
+		case 'subtract':	mRet = Subtract(iIndex, fSignal); break;
 		default:					throw new Error('Invalid task type');
 	}
+
+	mRet.type = sType;
+
+	return mRet;
 }
 
 
@@ -74,6 +81,7 @@ export default function(bActive, iIndex, fSignal) {
 			_domComp.classList.remove('hidden');
 			_completed = true;
 			Engine.adjustScore(mTask.levelInfo.points * (mTask.levelInfo.attempts - mTask.attempt + 1));
+			Engine.returnTypeToPool(mTask.type);
 			fSignal(sSignal, mTask.attempt === 1);
 		}
 	}

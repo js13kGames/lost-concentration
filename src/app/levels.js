@@ -38,6 +38,19 @@ export default {
 		{},
 	],
 
+	repeat: [
+		{attempts:2, points:100, count:4},
+		{},
+		{points:120, count:5},
+		{},
+		{attempts:3, points:140, count:6},
+		{},
+		{points:160, count:7},
+		{},
+		{points:180, count:8},
+		{},
+	],
+
 	same: [
 		{attempts:2, points:100, size:4},
 		{},
