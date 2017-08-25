@@ -1,6 +1,6 @@
 export default {
 	dots: [
-		{attempts:3, points:100, dotCount:6},
+		{dotCount:6},
 		{dotCount:8},
 		{dotCount:10},
 		{dotCount:14},
@@ -12,88 +12,85 @@ export default {
 		{dotCount:48},
 	],
 
+	elvis: [
+		{count:6, velocity:15},
+		{count:8},
+		{count:10, velocity:12},
+		{},
+		
+		{count:12},
+		{},
+
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+	],
+
 	math: [
-		{attempts:2, points:100, min:1, max:5, ops:'+', lines:2},
-		{points:110, max:7},
-		{points:120, min:2, max:9, ops:'x'},
-		{points:130, min:5, max:12},
-		{attempts:3, points:200, min:1, max:6, ops:'++', lines:3},
-		{points:220, max:9},
-		{points:240, min:3, max:12, ops:'x+'},
-		{points:260, min:5, max:15},
-		{points:300, min:10, max:20, ops:'x+'},
+		{min:1, max:5, ops:'+', lines:2},
+		{max:7},
+		{min:2, max:9, ops:'x'},
+		{min:5, max:12},
+		{min:1, max:6, ops:'++', lines:3},
+		{max:9},
+		{min:3, max:12, ops:'x+'},
+		{min:5, max:15},
+		{min:10, max:20, ops:'x+'},
 		{},
 	],
 
 	memory: [
-		{attempts:3, points:120, cols:3, rows:3},
+		{cols:3, rows:3},
 		{},
-		{points:180, cols:4},
+		{cols:4},
 		{},
-		{attempts:4, points:250, rows:4},
+		{rows:4},
 		{},
-		{attempts:5, points:400, cols:5},
+		{cols:5},
 		{},
-		{attempts:6, points:600, rows:5},
+		{rows:5},
 		{},
 	],
 
 	repeat: [
-		{attempts:2, points:100, count:4},
+		{count:4},
 		{},
-		{points:120, count:5},
+		{count:5},
 		{},
-		{attempts:3, points:140, count:6},
+		{count:6},
 		{},
-		{points:160, count:7},
+		{count:7},
 		{},
-		{points:180, count:8},
+		{count:8},
 		{},
 	],
 
 	same: [
-		{attempts:2, points:100, size:4},
+		{size:4},
 		{},
-		{points:150, size:5},
-		{},
-		{},
-		{attempts:3, points:200, size:6},
+		{size:5},
 		{},
 		{},
-		{points:200, size:7},
+		{size:6},
+		{},
+		{},
+		{size:7},
 		{},
 	],
 
 	subtract: [
-		{attempts:3, points:120, digits:3, borrow:1},
+		{digits:3, borrow:1},
 		{},
-		{points:150, digits:4, borrow:1},
+		{digits:4, borrow:1},
 		{},
-		{points:200, borrow:2},
+		{borrow:2},
 		{},
-		{points:220, digits:5},
+		{digits:5},
 		{},
-		{points:280, borrow:3},
+		{borrow:3},
 		{},
 	]
-
-	// dots: {
-	// 	attempts: 3,
-	// 	points: 100,
-	// 	dotCount: {min:6, max:32, step:1}
-	// },
-
-	// memory: {
-	// 	attempts: 3,
-	// 	points: 100,
-	// 	cols: {min:3, max:6, step:0.5},
-	// 	rows: {min:3, max:6, step:0.5}
-	// },
-
-	// subtract: {
-	// 	attempts: 3,
-	// 	points: 100,
-	// 	borrow: {min:1, max:3, step:0.2},
-	// 	digits: {min:3, max:5, step:0.2}
-	// }
 }

@@ -1,12 +1,17 @@
 import Engine from '../engine'
 import Dom from '../dom'
+import Attempts from '../components/attempt_indicator'
+
 import Dots from './tasks/dots'
-import Math from './tasks/math'
+import Elvis from './tasks/elvis'
+import Mathish from './tasks/math'
 import Memory from './tasks/memory'
 import Repeat from './tasks/repeat'
 import Same from './tasks/same'
 import Subtract from './tasks/subtract'
-import Attempts from '../components/attempt_indicator'
+
+const ATTEMPTS = 3;
+const POINTS = 100;
 
 const ACTIVE = 'opacity:0;transition-delay:.8s;z-index:-99;';
 const INACTIVE = 'opacity:0.6;transition-delay:0s;z-index:99;';
@@ -41,21 +46,21 @@ const _class = {
 	})
 };
 
+const _tasks = {
+	dots: Dots,
+	elvis: Elvis,
+	math: Mathish,
+	memory: Memory,
+	repeat: Repeat,
+	same: Same,
+	subtract: Subtract
+}
+
 
 // _createTask(iIndex, fSignal)
 function _createTask(iIndex, fSignal) {
-	let mRet;
-	let sType = Engine.nextTaskType(iIndex);
-
-	switch (sType) {
-		case 'dots':			mRet = Dots(iIndex, fSignal); break;
-		case 'math':			mRet = Math(iIndex, fSignal); break;
-		case 'memory':		mRet = Memory(iIndex, fSignal); break;
-		case 'repeat':		mRet = Repeat(iIndex, fSignal); break;
-		case 'same':			mRet = Same(iIndex, fSignal); break;
-		case 'subtract':	mRet = Subtract(iIndex, fSignal); break;
-		default:					throw new Error('Invalid task type');
-	}
+	let sType = Engine.nextTaskType();
+	let mRet = _tasks[sType](iIndex,fSignal);
 
 	mRet.type = sType;
 
@@ -80,7 +85,7 @@ export default function(bActive, iIndex, fSignal) {
 			mTask.remove();
 			_domComp.classList.remove('hidden');
 			_completed = true;
-			Engine.adjustScore(mTask.levelInfo.points * (mTask.levelInfo.attempts - mTask.attempt + 1));
+			Engine.adjustScore(POINTS * (ATTEMPTS - mTask.attempt + 1));
 			Engine.returnTypeToPool(mTask.type);
 			fSignal(sSignal, mTask.attempt === 1);
 		}
@@ -104,7 +109,7 @@ export default function(bActive, iIndex, fSignal) {
 			} else if (_task) {
 				_domBack.setAttribute('style', INACTIVE);
 				_attempt.setAttempt(++_task.attempt);
-				if (_task.attempt > _task.levelInfo.attempts) {
+				if (_task.attempt > ATTEMPTS) {
 					Engine.stop(Engine.GAME_OVER);
 				}
 			}
@@ -117,7 +122,7 @@ export default function(bActive, iIndex, fSignal) {
 		render() {
 			_self = this;
 			_task = _createTask(iIndex, _handleSignal);
-			_attempt = Attempts(_task.levelInfo.attempts, iIndex);
+			_attempt = Attempts(ATTEMPTS, iIndex);
 
 			_domBack = Dom.div(_class.backdrop, {style:bActive ? ACTIVE : INACTIVE});
 			_domComp = Dom.div([_class.complete, 'hidden'], null, 'COMPLETE!');

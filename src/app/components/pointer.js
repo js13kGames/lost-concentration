@@ -1,7 +1,7 @@
 import Engine from '../engine'
 import Dom from '../dom'
 
-const TMP_SWITCH_TIME = 600;//!!!
+const TMP_SWITCH_TIME = 500;//!!!
 
 const _class = {
 	base: Dom.addStyle('$main-pointer', {
@@ -54,7 +54,7 @@ export default function(fSignal) {
 
 		next(bExtra) {
 			if (bExtra) {
-			_extraTime = Math.max(0, Math.min(1000, _extraTime + (_rotateAt - Engine.getCounter())));
+			_extraTime = Math.max(0, Math.min(1000, _extraTime + Math.floor((_rotateAt - Engine.getCounter()) / 2)));
 			}
 			_rotateAt = 0;
 		},

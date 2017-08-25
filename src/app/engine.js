@@ -8,7 +8,7 @@ let _firstTask = true;
 let _levels = [];
 let _nextTypeIndex = 0;
 let _score = 0;
-let _taskTypes = ['dots', 'math', 'memory', 'repeat', 'same', 'subtract'];
+let _taskTypes = ['dots', 'elvis', 'math', 'memory', 'repeat', 'same', 'subtract'];
 
 
 // _update(nDelta)
@@ -78,14 +78,22 @@ console.log('+++', iAmount, _score);
 	},
 
 
-	// nextTaskType(iIndex)
-	// Get the type of secondary task to present next.
-	// 		iIndex	- Index of the secondary task area (0:UpperLeft, 1:UpperRight, 2:LowerLeft, 3:LowerRight).
-	// Returns a string with the type of secondary task ("dots|...").
-	nextTaskType(iIndex) {
-		return _taskTypes.splice(this.randomInt(0, _taskTypes.length - 1), 1)[0];
-		// return _taskTypes[_nextTypeIndex++ % _taskTypes.length];
-		// return 'repeat';
+	// nextTaskType()
+	// Get the type of secondary task to present next. The selected type is somewhat random but is weighted towards the 
+	// ones which have been displayed less recently.
+	// Returns a string with the type of secondary task ("dots|memory|...").
+	nextTaskType() {
+		let iChk = 3;
+		let iIndex = _taskTypes.length - 1;
+		let iRnd = this.randomInt(1, 100);
+
+		while (iRnd < 100 - iChk && iIndex > 0) {
+			--iIndex;
+			iChk *= 2;
+		}
+
+		return _taskTypes.splice(Math.max(0, iIndex), 1)[0];
+		// return 'elvis';
 	},
 
 
@@ -109,11 +117,11 @@ console.log('+++', iAmount, _score);
 	// },
 
 
-	// // randomItem(aSrc)
-	// // ...
-	// randomItem(aSrc) {
-	// 	return aSrc[this.randomInt(0, aSrc.length - 1)];
-	// },
+	// randomItem(aSrc)
+	// ...
+	randomItem(aSrc) {
+		return aSrc[this.randomInt(0, aSrc.length - 1)];
+	},
 
 
 	// randomItems(aSrc, iCount)
