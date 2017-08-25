@@ -1,6 +1,6 @@
-import Engine from '../../engine'
-import Dom from '../../dom'
-import Tile from '../shape_tile'
+import Engine from '../engine'
+import Dom from '../dom'
+import Tile from '../components/shape_tile'
 
 const HIDE_TIME = 60;
 const REMOVE_TIME = 20;
@@ -113,6 +113,7 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
+console.log('remove(memory)');
 			_tiles.forEach(mTile => {
 				if (mTile) {
 					mTile.remove();
@@ -128,7 +129,6 @@ export default function(iIndex, fSignal) {
 				let aCols = [];
 
 				for (let iCol = 0; iCol < _levelInfo.cols; ++iCol) {
-					// aCols.push(Dom.div(_class.gridCol, null, _tiles[iIndex++]));
 					aCols.push(Dom.div(_class.gridCol, null, _tiles[iIndex++]));
 				};
 

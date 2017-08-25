@@ -1,5 +1,5 @@
-import Engine from '../../engine'
-import Dom from '../../dom'
+import Engine from '../engine'
+import Dom from '../dom'
 
 const STATUS_NONE = 0;
 const STATUS_SET = 1;
@@ -88,6 +88,7 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
+console.log('remove(dots)');
 			_dots.forEach(dDot => dDot.removeEventListener('click', _handleClick));
 		},
 

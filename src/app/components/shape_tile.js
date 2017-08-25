@@ -48,6 +48,7 @@ export default function(oTile, iIndex, bToggle, fSignal) {
 		},
 
 		remove() {
+console.log('remove(shape_tile)');
 			this.dom.removeEventListener('click', _handleClick);
 		},
 

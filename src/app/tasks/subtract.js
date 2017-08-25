@@ -1,6 +1,6 @@
-import Engine from '../../engine'
-import Dom from '../../dom'
-import Input from '../number_input'
+import Engine from '../engine'
+import Dom from '../dom'
+import Input from '../components/number_input'
 
 const _class = {
 	base: Dom.addStyle('$task-subtract', {
@@ -92,6 +92,7 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
+console.log('remove(subtract)');
 			_inputs.remove();
 		},
 

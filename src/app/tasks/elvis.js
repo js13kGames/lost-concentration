@@ -1,6 +1,7 @@
-import Engine from '../../engine'
-import Dom from '../../dom'
+import Engine from '../engine'
+import Dom from '../dom'
 
+const UNIT = Dom.UNIT;
 const FAKES = ['ELV1S', 'E1VIS', 'EVLIS'];
 
 const _class = {
@@ -53,7 +54,6 @@ function _randomVelocity(oLevel) {
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
 	let _balls;
-	let _unit = Dom.UNIT;
 	let _levelInfo = Engine.getLevelInfo('elvis', _nextLevel++);
 
 	function _createBall(bElvis) {
@@ -64,7 +64,7 @@ export default function(iIndex, fSignal) {
 
 		return {
 			elvis: bElvis,
-			dom: Dom.div(_class.ball, {style:`left:${iX}${_unit};top:${iY}${_unit};`, click:_handleClick}, sName),
+			dom: Dom.div(_class.ball, {style:`left:${iX}${UNIT};top:${iY}${UNIT};`, click:_handleClick}, sName),
 			x: iX,
 			y: iY,
 			vx: oDir.vx,
@@ -84,7 +84,8 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
-
+console.log('remove(elvis)');
+			_balls.forEach(oBall => oBall.dom.removeEventListener('click', _handleClick));
 		},
 
 		render() {
@@ -104,7 +105,7 @@ export default function(iIndex, fSignal) {
 				oBall.y += oBall.vy;
 				if (oBall.x < 0 || oBall.x > 35) oBall.vx *= -1; 
 				if (oBall.y < 0 || oBall.y > 35) oBall.vy *= -1; 
-				oBall.dom.setAttribute('style', `left:${oBall.x}${_unit};top:${oBall.y}${_unit};`);
+				oBall.dom.setAttribute('style', `left:${oBall.x}${UNIT};top:${oBall.y}${UNIT};`);
 			});
 		}
 	};

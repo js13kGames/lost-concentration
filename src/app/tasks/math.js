@@ -1,7 +1,7 @@
-import Engine from '../../engine'
-import Dom from '../../dom'
-import Svg from '../../svg'
-import Key from '../keypad_input'
+import Engine from '../engine'
+import Dom from '../dom'
+import Svg from '../svg'
+import Key from '../components/keypad_input'
 
 const COLORS = ['#FF0000', '#00C000', '#0000FF', '#FF00FF', '#808000', '#8000880', '#008080', '#FF8080'];
 const SHAPES = ['gear', 'octagon', 'pacman', 'pentagon', 'ring', 'star', 'triangleDown', 'triangleUp'];
@@ -199,7 +199,9 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
+console.log('remove(math)');
 			this.dom.removeEventListener('click', _handleClick);
+			_keypad.remove();
 		},
 
 		render() {

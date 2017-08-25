@@ -26,10 +26,6 @@ const _class = {
 	})
 };
 
-// Dom.addStyle(`.${_class.key}:hover`, {
-// 	background: '#FFFFFF'
-// });
-
 
 // Create(dAnswer, fSignal)
 // Creates a component which displays a keypad for entering a number.
@@ -66,13 +62,15 @@ export default function(dAnswer, fSignal) {
 		dom: null,
 
 		remove() {
+console.log('remove(keypad_input)');
 			_keys.forEach(dKey => dKey.removeEventListener('click', _handleClick));
 		},
 
 		render() {
 			_self = this;
 
-			this.dom = Dom.div(_class.base, {style:'display:none;', click:_handleClick}, [
+			// this.dom = Dom.div(_class.base, {style:'display:none;', click:_handleClick}, [
+			this.dom = Dom.div(_class.base, {style:'display:none;'}, [
 				Dom.div(_class.row, null, [_createKey('7'), _createKey('8'), _createKey('9')]),
 				Dom.div(_class.row, null, [_createKey('4'), _createKey('5'), _createKey('6')]),
 				Dom.div(_class.row, null, [_createKey('1'), _createKey('2'), _createKey('3')]),

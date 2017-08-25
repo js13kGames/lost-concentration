@@ -1,5 +1,5 @@
-import Engine from '../../engine'
-import Dom from '../../dom'
+import Engine from '../engine'
+import Dom from '../dom'
 
 const _colorsBG = ['#FF0000', '#0000FF', '#FFFF00', '#00FF00', '#FF00FF', '#00FFFF'];
 const _colorsFG = ['#FFFFFF', '#FFFFFF', '#000000', '#000000', '#000000', '#000000'];
@@ -79,7 +79,7 @@ console.dir(oRet);
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _buttons, _deselect, _rows;
+	let _buttons, _deselect, _rows, _self;
 	let _levelInfo = Engine.getLevelInfo('repeat', _nextLevel++);
 	let _pattern = _createPattern(_levelInfo);
 	let _index = 0;
@@ -97,13 +97,14 @@ export default function(iIndex, fSignal) {
 			Engine.randomize(_rowStyles, true).forEach((sStyle, iNdx) => _rows[iNdx].setAttribute('style', sStyle));
 
 			Engine.randomize([0, 1, 2], true).forEach((iIndex, iNdx) => {
-				_buttons[iIndex].style.setProperty('order', iNdx * 2);
-				_buttons[iIndex + 3].style.setProperty('order', iNdx * 2);
+				_buttons[iIndex].dom.style.setProperty('order', iNdx * 2);
+				_buttons[iIndex + 3].dom.style.setProperty('order', iNdx * 2);
 			});
 		},
 
 		remove() {
-
+console.log('remove(repeat)');
+			_buttons.forEach(oButton => oButton.dom.removeEventListener('click', oButton.handler))
 		},
 
 		render() {
@@ -112,9 +113,12 @@ export default function(iIndex, fSignal) {
 				return Dom.div(_class.block, {style:`background:${_colorsBG[iIndex]};color:${_colorsFG[iIndex]};`},oBlock.taps);
 			});
 
+			_self = this;
+
 			_buttons = [0, 1, 2, 3, 4, 5].map(iIndex => {
 				let iOrder = iIndex * 2 - Math.floor(iIndex / 3) * 6;
-				return Dom.div(_class.btn, {style:`background:${_colorsBG[iIndex]};order:${iOrder};`, click:oEvt => {
+
+				function __handleClick(oEvt) {
 					if (iIndex === _pattern.real[_index]) {
 						if (_index === _pattern.real.length - 1) {
 							fSignal('solved');
@@ -122,26 +126,31 @@ export default function(iIndex, fSignal) {
 							++_index;
 							oEvt.target.classList.add(_class.click);
 							window.setTimeout(() => oEvt.target.classList.remove(_class.click), 100);
-							this.changeOrder();
+							_self.changeOrder();
 						}
 					}
-				}}, '');
+				}
+
+				return {
+					dom: Dom.div(_class.btn, {style:`background:${_colorsBG[iIndex]};order:${iOrder};`, click:__handleClick}, ''),
+					handler: __handleClick
+				};
 			});
 
 			_rows = [
 				Dom.div(_class.row, {style:_rowStyles[0]}, [
-					_buttons[0], 
+					_buttons[0].dom, 
 					Dom.span(null, {style:'order:1;width:4px;'}), 
-					_buttons[1],
+					_buttons[1].dom,
 					Dom.span(null, {style:'order:3;width:4px;'}), 
-					_buttons[2]
+					_buttons[2].dom
 				]),
 				Dom.div(_class.row, {style:_rowStyles[1]}, [
-					_buttons[3], 
+					_buttons[3].dom, 
 					Dom.span(null, {style:'order:1;width:4px;'}), 
-					_buttons[4],
+					_buttons[4].dom,
 					Dom.span(null, {style:'order:3;width:4px;'}), 
-					_buttons[5]
+					_buttons[5].dom
 				])
 			];
 

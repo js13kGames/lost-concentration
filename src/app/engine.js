@@ -26,6 +26,10 @@ export default {
 	// ...
 	currentLevel: 1,
 
+	// stopped
+	// ...
+	stopped: false,
+
 
 	// adjustScore(iAmount)
 	// ...
@@ -65,11 +69,19 @@ console.log('+++', iAmount, _score);
 	},
 
 
+	// getScore()
+	// ...
+	getScore() {
+		return _score;
+	},
+
+
 	// init(mStage)
 	// ...
 	init(mStage) {
 		_count = _points = 0;
 		_stage = mStage;
+		this.stopped = false;
 
 		document.body.appendChild(mStage.render());
 		
@@ -168,6 +180,13 @@ console.log('+++', iAmount, _score);
 	},
 
 
+	// restart()
+	// ...
+	restart() {
+		console.log('Restart game');
+	},
+
+
 	// returnTypeToPool(sType)
 	// ...
 	returnTypeToPool(sType) {
@@ -178,9 +197,9 @@ console.log('+++', iAmount, _score);
 	// stop(iCode)
 	// ...
 	stop(iCode) {
+		this.stopped = true;
 		Loop.stop();
-	console.log('Engine Stopped', iCode);
-	console.log('SCORE:', _score);
+console.log('Engine Stopped', iCode);
 	},
 
 
@@ -188,6 +207,5 @@ console.log('+++', iAmount, _score);
 	// ...
 	updatePoints(iPoints) {
 		_points += iPoints;
-		console.log('POINTS', _points, iPoints);
 	}
 }

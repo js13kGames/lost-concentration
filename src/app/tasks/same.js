@@ -1,6 +1,6 @@
-import Engine from '../../engine'
-import Dom from '../../dom'
-import Tile from '../shape_tile'
+import Engine from '../engine'
+import Dom from '../dom'
+import Tile from '../components/shape_tile'
 
 const COLORS = ['#FF0000','#00FF00','#0000FF','#FFFF00','#FF00FF','#00FFFF','#808000','#8000880','#008080','#FF8080'];
 const SHAPES = ['gear','octagon','pacman','pentagon','reuleaux','ring','star','starburst','triangleDown','triangleUp'];
@@ -88,6 +88,7 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
+console.log('remove(same)');
 			_tiles.forEach(mTile => {
 				if (mTile) {
 					mTile.remove();

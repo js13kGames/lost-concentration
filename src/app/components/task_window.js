@@ -2,19 +2,19 @@ import Engine from '../engine'
 import Dom from '../dom'
 import Attempts from '../components/attempt_indicator'
 
-import Dots from './tasks/dots'
-import Elvis from './tasks/elvis'
-import Mathish from './tasks/math'
-import Memory from './tasks/memory'
-import Repeat from './tasks/repeat'
-import Same from './tasks/same'
-import Subtract from './tasks/subtract'
+import Dots from '../tasks/dots'
+import Elvis from '../tasks/elvis'
+import Mathish from '../tasks/math'
+import Memory from '../tasks/memory'
+import Repeat from '../tasks/repeat'
+import Same from '../tasks/same'
+import Subtract from '../tasks/subtract'
 
 const ATTEMPTS = 3;
 const POINTS = 100;
 
 const ACTIVE = 'opacity:0;transition-delay:.8s;z-index:-99;';
-const INACTIVE = 'opacity:0.6;transition-delay:0s;z-index:99;';
+const INACTIVE = 'opacity:0.65;transition-delay:0s;z-index:99;';
 
 const _class = {
 	base: Dom.addStyle('$task-window', {
@@ -27,7 +27,7 @@ const _class = {
 	backdrop: Dom.addStyle('$task-back', {
 		background: '#000000',
 		height: '100%',
-		opacity: '0.6',
+		opacity: '0.65',
 		position: 'absolute',
 		transition: 'opacity .6s ease-out',
 		width: '100%'
@@ -77,16 +77,29 @@ function _createTask(iIndex, fSignal) {
 export default function(bActive, iIndex, fSignal) {
 	let _attempt, _completed, _domBack, _domComp, _self, _task;
 
-	function _handleSignal(sSignal, vData) {
-		if (sSignal === 'solved') {
-			let mTask = _task;
+	function _clear(mTask) {
+		if (mTask) {
 			_task = null;
 			_self.dom.removeChild(mTask.dom);
 			mTask.remove();
+			Engine.returnTypeToPool(mTask.type);
+		} else {
+			_completed = false;
+			_domComp.classList.add('hidden');
+			_task = _createTask(iIndex, _handleSignal);
+			_self.dom.appendChild(_task.render());
+			_attempt.setAttempt(1);
+		}
+	}
+
+	function _handleSignal(sSignal, vData) {
+		let mTask = _task;
+
+		if (sSignal === 'solved') {
+			_clear(mTask);
 			_domComp.classList.remove('hidden');
 			_completed = true;
 			Engine.adjustScore(POINTS * (ATTEMPTS - mTask.attempt + 1));
-			Engine.returnTypeToPool(mTask.type);
 			fSignal(sSignal, mTask.attempt === 1);
 		}
 	}
@@ -99,24 +112,21 @@ export default function(bActive, iIndex, fSignal) {
 
 			if (bActive) {
 				if (_completed) {
-					_completed = false;
-					_domComp.classList.add('hidden');
-					_task = _createTask(iIndex, _handleSignal);
-					_self.dom.appendChild(_task.render());
-					_attempt.setAttempt(1);
+					_clear();
 				}
 				_domBack.setAttribute('style', ACTIVE);
 			} else if (_task) {
 				_domBack.setAttribute('style', INACTIVE);
 				_attempt.setAttempt(++_task.attempt);
 				if (_task.attempt > ATTEMPTS) {
-					Engine.stop(Engine.GAME_OVER);
+					fSignal('game_over', iIndex);
 				}
 			}
 		},
 
 		remove() {
-			//!!!
+console.log('remove(task_window)');
+			_task.remove();
 		},
 
 		render() {
@@ -130,6 +140,11 @@ export default function(bActive, iIndex, fSignal) {
 			this.dom = Dom.div(_class.base, null, [_attempt, _task, _domBack, _domComp]);
 
 			return this.dom;
+		},
+
+		restart() {
+			_clear(_task);
+			_clear();
 		},
 
 		update(iCounter) {

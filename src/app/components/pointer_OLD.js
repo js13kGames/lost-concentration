@@ -1,8 +1,8 @@
 import Engine from '../engine'
 import Dom from '../dom'
 
-const SWITCH_TIME = 500;
-// const SWITCH_TIME = 50;
+const TMP_SWITCH_TIME = 500;//!!!
+
 const _class = {
 	base: Dom.addStyle('$main-pointer', {
 		'align-items': 'center',
@@ -42,15 +42,11 @@ export default function(fSignal) {
 	let _extra, _self;
 	let _extraTime = 0;
 	let _rotation = 45;
-	let _rotateAt = SWITCH_TIME;
+	let _rotateAt = TMP_SWITCH_TIME;
 
 	// _handleClick
 	function _handleClick(oEvt) {
-		if (Engine.stopped) {
-			fSignal('restart');
-		} else {
-Engine.stop();
-		}
+		Engine.stop();
 	}
 
 	return {
@@ -74,18 +70,20 @@ Engine.stop();
 
 		update(iCounter) {
 			if (iCounter >= _rotateAt) {
-				_rotateAt = iCounter + SWITCH_TIME;
+				_rotateAt = iCounter + TMP_SWITCH_TIME;
 				_rotation += 90;
 				if (_extraTime) {
 
-					_rotateAt = iCounter + SWITCH_TIME + _extraTime;
+					_rotateAt = iCounter + TMP_SWITCH_TIME + _extraTime;
 				}
+
 				_self.dom.setAttribute('style', `transform:rotate(${_rotation}deg)`);
 				fSignal('next', (_rotation % 360 - 45) / 90);
 			} else if (_extraTime) {
 				let iExtra = _extraTime / 100;
 				_extra.setAttribute('style', `border-width:${iExtra}${Dom.UNIT};border-radius:${iExtra}${Dom.UNIT};`);
 				--_extraTime;
+			} else if (iCounter >= _rotateAt) {
 			}
 		}
 	};
