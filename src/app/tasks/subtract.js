@@ -92,7 +92,6 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
-console.log('remove(subtract)');
 			_inputs.remove();
 		},
 
@@ -106,6 +105,10 @@ console.log('remove(subtract)');
 			]);
 
 			return this.dom;
+		},
+
+		restart() {
+			_nextLevel = 1;
 		},
 
 		update(iCounter) {

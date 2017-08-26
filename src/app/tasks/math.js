@@ -199,7 +199,6 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
-console.log('remove(math)');
 			this.dom.removeEventListener('click', _handleClick);
 			_keypad.remove();
 		},
@@ -210,6 +209,10 @@ console.log('remove(math)');
 			this.dom = Dom.div(_class.base, null, Dom.div(_class.puzzle, {click:_handleClick}, [_puzzle.dom, _keypad]));
 
 			return this.dom;
+		},
+
+		restart() {
+			_nextLevel = 1;
 		},
 
 		update(iCounter) {

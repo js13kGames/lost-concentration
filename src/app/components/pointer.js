@@ -72,8 +72,13 @@ Engine.stop();
 			return this.dom;
 		},
 
+		restart() {
+			_rotateAt = SWITCH_TIME;
+		},
+
 		update(iCounter) {
 			if (iCounter >= _rotateAt) {
+console.log('rotate', iCounter, _rotateAt);
 				_rotateAt = iCounter + SWITCH_TIME;
 				_rotation += 90;
 				if (_extraTime) {

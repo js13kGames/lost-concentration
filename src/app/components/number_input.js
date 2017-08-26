@@ -26,7 +26,6 @@ export default function(iSolution, fSignal) {
 		dom: null,
 
 		remove() {
-console.log('remove(number_input)');
 			_digits.forEach(mDigit => mDigit.remove());
 		},
 

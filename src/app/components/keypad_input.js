@@ -62,7 +62,6 @@ export default function(dAnswer, fSignal) {
 		dom: null,
 
 		remove() {
-console.log('remove(keypad_input)');
 			_keys.forEach(dKey => dKey.removeEventListener('click', _handleClick));
 		},
 

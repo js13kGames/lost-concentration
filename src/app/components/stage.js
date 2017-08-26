@@ -103,8 +103,15 @@ export default function() {
 			return this.dom;
 		},
 
+		restart() {
+			_endGame = null;
+			_pointer.restart();
+			_tasks.forEach(mTask => mTask.restart());
+		},
+
 		update(iCounter) {
 			if (_endGame) {
+console.log('END');
 				if (iCounter >= _endGame) {
 					Engine.stop(Engine.GAME_OVER);
 					_endView = Dom.div(_class.over, {style:_gameOverPositions[_oldIndex]}, [

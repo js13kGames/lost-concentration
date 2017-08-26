@@ -184,6 +184,10 @@ console.log('+++', iAmount, _score);
 	// ...
 	restart() {
 		console.log('Restart game');
+		_count = _points = 0;
+		this.stopped = false;
+		_stage.restart();
+		Loop.start();
 	},
 
 

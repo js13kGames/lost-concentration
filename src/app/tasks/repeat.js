@@ -103,7 +103,6 @@ export default function(iIndex, fSignal) {
 		},
 
 		remove() {
-console.log('remove(repeat)');
 			_buttons.forEach(oButton => oButton.dom.removeEventListener('click', oButton.handler))
 		},
 
@@ -161,6 +160,10 @@ console.log('remove(repeat)');
 			]));
 
 			return this.dom;
+		},
+
+		restart() {
+			_nextLevel = 1;
 		},
 
 		update(iCounter) {

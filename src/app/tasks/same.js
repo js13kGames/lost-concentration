@@ -88,7 +88,6 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
-console.log('remove(same)');
 			_tiles.forEach(mTile => {
 				if (mTile) {
 					mTile.remove();
@@ -113,6 +112,10 @@ console.log('remove(same)');
 			this.dom = Dom.div(_class.base, null, Dom.div(_class.grid, null, aRows));
 
 			return this.dom;
+		},
+
+		restart() {
+			_nextLevel = 1;
 		},
 
 		update(iCounter) {

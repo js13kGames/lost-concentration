@@ -49,7 +49,6 @@ export default function(vValue, iIndex, fSignal) {
 		},
 
 		remove() {
-console.log('remove(digit_input)');
 			_incBtn.removeEventListener('click', _handleClick);
 			_decBtn.removeEventListener('click', _handleClick);
 		},

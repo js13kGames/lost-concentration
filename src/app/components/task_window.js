@@ -10,7 +10,7 @@ import Repeat from '../tasks/repeat'
 import Same from '../tasks/same'
 import Subtract from '../tasks/subtract'
 
-const ATTEMPTS = 3;
+const ATTEMPTS = 2;
 const POINTS = 100;
 
 const ACTIVE = 'opacity:0;transition-delay:.8s;z-index:-99;';
@@ -125,7 +125,6 @@ export default function(bActive, iIndex, fSignal) {
 		},
 
 		remove() {
-console.log('remove(task_window)');
 			_task.remove();
 		},
 
@@ -145,6 +144,7 @@ console.log('remove(task_window)');
 		restart() {
 			_clear(_task);
 			_clear();
+			_task.restart();
 		},
 
 		update(iCounter) {

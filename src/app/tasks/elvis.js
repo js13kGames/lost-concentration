@@ -84,7 +84,6 @@ export default function(iIndex, fSignal) {
 		levelInfo: _levelInfo,
 
 		remove() {
-console.log('remove(elvis)');
 			_balls.forEach(oBall => oBall.dom.removeEventListener('click', _handleClick));
 		},
 
@@ -97,6 +96,10 @@ console.log('remove(elvis)');
 			this.dom = Dom.div(_class.base, null, Dom.div(_class.board, null, _balls.map(oBall => oBall.dom)));
 
 			return this.dom;
+		},
+
+		restart() {
+			_nextLevel = 1;
 		},
 
 		update(iCounter) {
