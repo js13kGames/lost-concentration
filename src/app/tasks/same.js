@@ -1,5 +1,6 @@
-import Engine from '../engine'
+import Audio from '../audio'
 import Dom from '../dom'
+import Engine from '../engine'
 import Tile from '../components/shape_tile'
 
 const COLORS = ['#FF0000','#00FF00','#0000FF','#FFFF00','#FF00FF','#00FFFF','#808000','#8000880','#008080','#FF8080'];
@@ -34,7 +35,6 @@ const _class = {
 	})
 };
 
-let _nextLevel = 1;
 let _tileSet = [];
 
 COLORS.forEach(sColor => {
@@ -62,9 +62,10 @@ function _createTiles(iCount, fSignal) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _first;
-	let _levelInfo = Engine.getLevelInfo('same', _nextLevel++);
-	let _tiles = _createTiles(_levelInfo.size * _levelInfo.size, _handleSignal);
+	let _first, _levelInfo, _tiles;
+
+	_levelInfo = Engine.getLevelInfo('same');
+	_tiles = _createTiles(_levelInfo.size * _levelInfo.size, _handleSignal);
 
 	function _handleSignal(sSignal, oData) {
 		if (!_first) {
@@ -74,6 +75,7 @@ export default function(iIndex, fSignal) {
 				if (oData.shape === _first.shape && oData.color === _first.color) {
 					fSignal('solved');
 				} else {
+					Audio.incorrect();
 					_tiles[oData.index].show();
 					_tiles[_first.index].show();
 					_first = null;
@@ -112,10 +114,6 @@ export default function(iIndex, fSignal) {
 			this.dom = Dom.div(_class.base, null, Dom.div(_class.grid, null, aRows));
 
 			return this.dom;
-		},
-
-		restart() {
-			_nextLevel = 1;
 		},
 
 		update(iCounter) {

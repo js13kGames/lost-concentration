@@ -1,6 +1,7 @@
-import Engine from '../engine'
-import Dom from '../dom'
 import Attempts from '../components/attempt_indicator'
+import Audio from '../audio'
+import Dom from '../dom'
+import Engine from '../engine'
 
 import Dots from '../tasks/dots'
 import Elvis from '../tasks/elvis'
@@ -10,7 +11,7 @@ import Repeat from '../tasks/repeat'
 import Same from '../tasks/same'
 import Subtract from '../tasks/subtract'
 
-const ATTEMPTS = 2;
+const ATTEMPTS = 3;
 const POINTS = 100;
 
 const ACTIVE = 'opacity:0;transition-delay:.8s;z-index:-99;';
@@ -43,8 +44,20 @@ const _class = {
 		'position': 'absolute',
 		'width': '100%',
 		'z-index': '100'
+	}),
+	level: Dom.addStyle('$task-level', {
+		'color': '#808080',
+		'font-size': 2,
+		'position': 'absolute'
 	})
 };
+
+const _levelStyles = [
+	'left:4px;bottom:4px;',
+	'right:4px;bottom:4px;',
+	'right:4px;top:4px;',
+	'left:4px;top:4px;',
+];
 
 const _tasks = {
 	dots: Dots,
@@ -60,7 +73,7 @@ const _tasks = {
 // _createTask(iIndex, fSignal)
 function _createTask(iIndex, fSignal) {
 	let sType = Engine.nextTaskType();
-	let mRet = _tasks[sType](iIndex,fSignal);
+	let mRet = _tasks[sType](iIndex, fSignal);
 
 	mRet.type = sType;
 
@@ -69,39 +82,41 @@ function _createTask(iIndex, fSignal) {
 
 
 // Create(bActive, iIndex, fSignal)
-// Creates a task component which is one of the four areas on the screen where random tasks are presented.
-// 		bActive	- Does this task begin as the active task (able to be interacted with)?
-// 		iIndex	- Index of task window (0:TopLeft, 1:TopRight, 2:BottomRight, 3:BottomLeft).
+// Creates a task window which is one of the four areas on the stage where random tasks are presented.
+// 		bActive	- Does this window begin as the active window (able to be interacted with)?
+// 		iIndex	- Index of window window (0:TopLeft, 1:TopRight, 2:BottomRight, 3:BottomLeft).
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(bActive, iIndex, fSignal) {
-	let _attempt, _completed, _domBack, _domComp, _self, _task;
+	let _attempt, _completed, _domBack, _domComp, _levelInd, _self, _task;
 
-	function _clear(mTask) {
-		if (mTask) {
-			_task = null;
-			_self.dom.removeChild(mTask.dom);
-			mTask.remove();
-			Engine.returnTypeToPool(mTask.type);
-		} else {
-			_completed = false;
-			_domComp.classList.add('hidden');
-			_task = _createTask(iIndex, _handleSignal);
-			_self.dom.appendChild(_task.render());
-			_attempt.setAttempt(1);
-		}
+	function _clear() {
+		_completed = false;
+		_domComp.classList.add('hidden');
+		_task = _createTask(iIndex, _handleSignal);
+		_self.dom.appendChild(_task.render());
+		_attempt.setAttempt(1);
+		_levelInd.innerText = 'Level ' + (_task.levelInfo.level + 1);
 	}
 
 	function _handleSignal(sSignal, vData) {
 		let mTask = _task;
 
 		if (sSignal === 'solved') {
-			_clear(mTask);
+			Audio.correct();
+			_removeTask(mTask);
 			_domComp.classList.remove('hidden');
 			_completed = true;
 			Engine.adjustScore(POINTS * (ATTEMPTS - mTask.attempt + 1));
 			fSignal(sSignal, mTask.attempt === 1);
 		}
+	}
+
+	function _removeTask(mTask) {
+		_task = null;
+		_self.dom.removeChild(mTask.dom);
+		mTask.remove();
+		Engine.returnTypeToPool(mTask.type);
 	}
 
 	return {
@@ -135,16 +150,18 @@ export default function(bActive, iIndex, fSignal) {
 
 			_domBack = Dom.div(_class.backdrop, {style:bActive ? ACTIVE : INACTIVE});
 			_domComp = Dom.div([_class.complete, 'hidden'], null, 'COMPLETE!');
+			_levelInd = Dom.div(_class.level, {style:_levelStyles[iIndex]}, 'Level ' + (_task.levelInfo.level + 1));
 			
-			this.dom = Dom.div(_class.base, null, [_attempt, _task, _domBack, _domComp]);
+			this.dom = Dom.div(_class.base, null, [_attempt, _task, _domBack, _domComp, _levelInd]);
 
 			return this.dom;
 		},
 
 		restart() {
-			_clear(_task);
-			_clear();
-			_task.restart();
+			if (_task) {
+				_removeTask(_task);
+				_clear();
+			}
 		},
 
 		update(iCounter) {

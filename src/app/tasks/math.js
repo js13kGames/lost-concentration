@@ -1,7 +1,8 @@
-import Engine from '../engine'
+import Audio from '../audio'
 import Dom from '../dom'
-import Svg from '../svg'
+import Engine from '../engine'
 import Key from '../components/keypad_input'
+import Svg from '../svg'
 
 const COLORS = ['#FF0000', '#00C000', '#0000FF', '#FF00FF', '#808000', '#8000880', '#008080', '#FF8080'];
 const SHAPES = ['gear', 'octagon', 'pacman', 'pentagon', 'ring', 'star', 'triangleDown', 'triangleUp'];
@@ -46,8 +47,6 @@ const _class = {
 		'min-width': 10
 	})
 };
-
-let _nextLevel = 1;
 
 
 // _arrayFromTo(iFrom, iTo)
@@ -175,9 +174,10 @@ function _shape(sShape, sColor) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _keypad;
-	let _levelInfo = Engine.getLevelInfo('math', _nextLevel++);
-	let _puzzle = _generatePuzzle(_levelInfo);
+	let _keypad, _levelInfo, _puzzle;
+
+	_levelInfo = Engine.getLevelInfo('math');
+	_puzzle = _generatePuzzle(_levelInfo);
 
 	function _handleClick(oEvt) {
 		_keypad.show();
@@ -188,6 +188,7 @@ export default function(iIndex, fSignal) {
 			if (oData === _puzzle.solution) {
 				fSignal('solved');
 			} else {
+				Audio.incorrect();
 				_puzzle.answerBox.setAttribute('style', 'color:red;');
 			}
 		}
@@ -209,10 +210,6 @@ export default function(iIndex, fSignal) {
 			this.dom = Dom.div(_class.base, null, Dom.div(_class.puzzle, {click:_handleClick}, [_puzzle.dom, _keypad]));
 
 			return this.dom;
-		},
-
-		restart() {
-			_nextLevel = 1;
 		},
 
 		update(iCounter) {

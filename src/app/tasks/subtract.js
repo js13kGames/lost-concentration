@@ -1,5 +1,5 @@
-import Engine from '../engine'
 import Dom from '../dom'
+import Engine from '../engine'
 import Input from '../components/number_input'
 
 const _class = {
@@ -29,19 +29,9 @@ const _class = {
 	})
 };
 
-let _nextLevel = 1;		// Static global for all dots tasks...
-
 
 // _createProblem(oLevel)
 function _createProblem(oLevel) {
-	let oValues = _generateValues(oLevel);
-
-	return oValues;
-}
-
-
-// _generateValues(oLevel)
-function _generateValues(oLevel) {
 	let oRet = {};
 	let aLine1 = [];
 	let aLine2 = [];
@@ -78,10 +68,12 @@ function _generateValues(oLevel) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _levelInfo = Engine.getLevelInfo('subtract', _nextLevel++);
-	let _problem = _createProblem(_levelInfo);
-	let _inputs = Input(_problem.solution, _handleSignal);
-	
+	let _inputs, _levelInfo, _problem;
+
+	_levelInfo = Engine.getLevelInfo('subtract');
+	_problem = _createProblem(_levelInfo);
+	_inputs = Input(_problem.solution, _handleSignal);
+
 	function _handleSignal(sSignal) {
 		fSignal('solved');
 	}
@@ -105,10 +97,6 @@ export default function(iIndex, fSignal) {
 			]);
 
 			return this.dom;
-		},
-
-		restart() {
-			_nextLevel = 1;
 		},
 
 		update(iCounter) {

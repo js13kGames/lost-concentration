@@ -1,5 +1,6 @@
-import Engine from '../engine'
+import Audio from '../audio'
 import Dom from '../dom'
+import Engine from '../engine'
 
 const _colorsBG = ['#FF0000', '#0000FF', '#FFFF00', '#00FF00', '#FF00FF', '#00FFFF'];
 const _colorsFG = ['#FFFFFF', '#FFFFFF', '#000000', '#000000', '#000000', '#000000'];
@@ -51,8 +52,6 @@ const _class = {
 	click: Dom.addStyle('$repeat-click', 'opacity:.4 !important')
 };
 
-let _nextLevel = 1;
-
 
 // _createPattern(oLevel)
 function _createPattern(oLevel) {
@@ -68,7 +67,6 @@ function _createPattern(oLevel) {
 		}
 	}
 
-console.dir(oRet);
 	return oRet;
 }
 
@@ -79,14 +77,11 @@ console.dir(oRet);
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _buttons, _deselect, _rows, _self;
-	let _levelInfo = Engine.getLevelInfo('repeat', _nextLevel++);
-	let _pattern = _createPattern(_levelInfo);
+	let _buttons, _deselect, _levelInfo, _pattern, _rows, _self;
 	let _index = 0;
 
-	function _handleClick(oEvt) {
-
-	}
+	_levelInfo = Engine.getLevelInfo('repeat');
+	_pattern = _createPattern(_levelInfo);
 
 	return {
 		attempt: 1,
@@ -127,6 +122,8 @@ export default function(iIndex, fSignal) {
 							window.setTimeout(() => oEvt.target.classList.remove(_class.click), 100);
 							_self.changeOrder();
 						}
+					} else {
+						Audio.incorrect();
 					}
 				}
 
@@ -160,10 +157,6 @@ export default function(iIndex, fSignal) {
 			]));
 
 			return this.dom;
-		},
-
-		restart() {
-			_nextLevel = 1;
 		},
 
 		update(iCounter) {

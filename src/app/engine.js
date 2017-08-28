@@ -1,7 +1,6 @@
 import Loop from './loop'
 import Levels from './levels'
 
-
 let _points, _stage;
 let _count = 0;
 let _firstTask = true;
@@ -26,6 +25,10 @@ export default {
 	// ...
 	currentLevel: 1,
 
+	// started
+	// ...
+	started: false,
+
 	// stopped
 	// ...
 	stopped: false,
@@ -35,7 +38,6 @@ export default {
 	// ...
 	adjustScore(iAmount) {
 		_score += iAmount;
-console.log('+++', iAmount, _score);
 	},
 
 
@@ -46,26 +48,36 @@ console.log('+++', iAmount, _score);
 	},
 
 
-	// getLevelInfo(sTask, iLevel)
+	// getLevelInfo(sTask)
 	// ...
-	getLevelInfo(sTask, iLevel) {
+	getLevelInfo(sTask) {
 		let oPrev;
 
 		if (!_levels[sTask]) {
-			_levels[sTask] = Levels[sTask].map((oLvl, iNdx) => {
+			_levels[sTask] = {nextLevel:0};
+			_levels[sTask].info = Levels[sTask].map((oLvl, iNdx) => {
 				if (iNdx === 0) {
 					oPrev = oLvl;
 				} else {
+					// oPrev = Object.assign({}, oPrev);
 					oPrev = Object.assign({}, oPrev);
 					Object.keys(oLvl).forEach(sKey => {
 						oPrev[sKey] = oLvl[sKey];
 					});
 				}
+				oPrev.level = iNdx;
 				return oPrev;
 			});
 		}
 
-		return _levels[sTask][iLevel - 1];
+		return _levels[sTask].info[_levels[sTask].nextLevel++];
+	},
+
+
+	// resetLevels()
+	// ...
+	resetLevels() {
+		Object.keys(_levels).forEach(sKey => _levels[sKey].nextLevel = 0);
 	},
 
 
@@ -87,6 +99,7 @@ console.log('+++', iAmount, _score);
 		
 		Loop.setUpdate(_update);
 		Loop.start();
+		this.started = true;
 	},
 
 
@@ -186,7 +199,7 @@ console.log('+++', iAmount, _score);
 		console.log('Restart game');
 		_count = _points = 0;
 		this.stopped = false;
-		_stage.restart();
+		// _stage.restart();
 		Loop.start();
 	},
 

@@ -2,7 +2,7 @@ import Engine from '../engine'
 import Dom from '../dom'
 
 const SWITCH_TIME = 500;
-// const SWITCH_TIME = 50;
+// const SWITCH_TIME = 380;
 const _class = {
 	base: Dom.addStyle('$main-pointer', {
 		'align-items': 'center',
@@ -49,7 +49,7 @@ export default function(fSignal) {
 		if (Engine.stopped) {
 			fSignal('restart');
 		} else {
-Engine.stop();
+			fSignal('next_menu');
 		}
 	}
 
@@ -57,10 +57,16 @@ Engine.stop();
 		dom: null,
 
 		next(bExtra) {
-			if (bExtra) {
-			_extraTime = Math.max(0, Math.min(1000, _extraTime + Math.floor((_rotateAt - Engine.getCounter()) / 2)));
+			if (Engine.started) {
+				if (bExtra) {
+				_extraTime = Math.max(0, Math.min(1000, _extraTime + Math.floor((_rotateAt - Engine.getCounter()) / 2)));
+				}
+	
+				_rotateAt = 0;
+			} else {
+				_rotateAt = 0;
+				this.update(1);
 			}
-			_rotateAt = 0;
 		},
 
 		render() {
@@ -78,11 +84,9 @@ Engine.stop();
 
 		update(iCounter) {
 			if (iCounter >= _rotateAt) {
-console.log('rotate', iCounter, _rotateAt);
 				_rotateAt = iCounter + SWITCH_TIME;
 				_rotation += 90;
 				if (_extraTime) {
-
 					_rotateAt = iCounter + SWITCH_TIME + _extraTime;
 				}
 				_self.dom.setAttribute('style', `transform:rotate(${_rotation}deg)`);

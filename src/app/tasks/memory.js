@@ -1,5 +1,5 @@
-import Engine from '../engine'
 import Dom from '../dom'
+import Engine from '../engine'
 import Tile from '../components/shape_tile'
 
 const HIDE_TIME = 60;
@@ -37,7 +37,6 @@ const _class = {
 	})
 };
 
-let _nextLevel = 1;
 let _tileSet = [];
 
 COLORS.forEach(sColor => {
@@ -69,13 +68,14 @@ function _createTiles(iCount, fSignal) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _hideTime;
-	let _levelInfo = Engine.getLevelInfo('memory', _nextLevel++);
-	let _tiles = _createTiles(_levelInfo.cols * _levelInfo.rows, _handleSignal);
+	let _hideTime, _levelInfo, _tiles;
 	let _selections = [];
 	let _hide = [];
 	let _remove = [];
 	let _found = 0;
+
+	_levelInfo = Engine.getLevelInfo('memory');
+	_tiles = _createTiles(_levelInfo.cols * _levelInfo.rows, _handleSignal);
 
 	function _handleSignal(sSignal, oData) {
 		_selections.push(oData)
@@ -137,10 +137,6 @@ export default function(iIndex, fSignal) {
 			this.dom = Dom.div(_class.base, null, Dom.div(_class.grid, null, aRows));
 
 			return this.dom;
-		},
-
-		restart() {
-			_nextLevel = 1;
 		},
 
 		update(iCounter) {

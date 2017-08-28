@@ -1,5 +1,6 @@
-import Engine from '../engine'
+import Audio from '../audio'
 import Dom from '../dom'
+import Engine from '../engine'
 
 const STATUS_NONE = 0;
 const STATUS_SET = 1;
@@ -33,8 +34,6 @@ const _class = {
 	dotGood: Dom.addStyle('$task-dot-good', 'background:#00A000 !important;')
 };
 
-let _nextLevel = 1;		// Static global for all dots tasks...
-
 
 // _randomDots(iCount) {
 function _randomDots(iCount, fClick) {
@@ -58,10 +57,11 @@ function _randomDots(iCount, fClick) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _dots, _selectedDot, _statusChangeTime;
+	let _dots, _levelInfo, _selectedDot, _statusChangeTime;
 	let _nextDotIndex = 0;
 	let _dotStatus = STATUS_NONE;
-	let _levelInfo = Engine.getLevelInfo('dots', _nextLevel++);
+	
+	_levelInfo = Engine.getLevelInfo('dots');
 
 	function _handleClick(oEvt) {
 		let sClass;
@@ -75,6 +75,7 @@ export default function(iIndex, fSignal) {
 			}
 		} else {
 			sClass = 'dotBad';
+			Audio.incorrect();
 		}
 
 		_dotStatus = STATUS_SET;
@@ -89,10 +90,6 @@ export default function(iIndex, fSignal) {
 
 		remove() {
 			_dots.forEach(dDot => dDot.removeEventListener('click', _handleClick));
-		},
-
-		restart() {
-			_nextLevel = 1;
 		},
 
 		render() {

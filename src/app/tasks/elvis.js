@@ -1,5 +1,6 @@
-import Engine from '../engine'
+import Audio from '../audio'
 import Dom from '../dom'
+import Engine from '../engine'
 
 const UNIT = Dom.UNIT;
 const FAKES = ['ELV1S', 'E1VIS', 'EVLIS'];
@@ -35,8 +36,6 @@ const _class = {
 	})
 };
 
-let _nextLevel = 1;
-
 
 // _randomVelocity(oLevel)
 function _randomVelocity(oLevel) {
@@ -53,8 +52,9 @@ function _randomVelocity(oLevel) {
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(iIndex, fSignal) {
-	let _balls;
-	let _levelInfo = Engine.getLevelInfo('elvis', _nextLevel++);
+	let _balls, _levelInfo;
+
+	_levelInfo = Engine.getLevelInfo('elvis');
 
 	function _createBall(bElvis) {
 		let sName = bElvis ? 'ELVIS' : Engine.randomItem(FAKES);
@@ -73,8 +73,11 @@ export default function(iIndex, fSignal) {
 	}
 
 	function _handleClick(oEvt) {
+// debugger;
 		if (oEvt.target.innerText === 'ELVIS') {
 			fSignal('solved');
+		} else {
+			Audio.incorrect();
 		}
 	}
 
@@ -96,10 +99,6 @@ export default function(iIndex, fSignal) {
 			this.dom = Dom.div(_class.base, null, Dom.div(_class.board, null, _balls.map(oBall => oBall.dom)));
 
 			return this.dom;
-		},
-
-		restart() {
-			_nextLevel = 1;
 		},
 
 		update(iCounter) {

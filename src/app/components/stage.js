@@ -44,17 +44,15 @@ export default function() {
 	let _endGame, _endView, _self;
 	let _oldIndex = 0;
 	let _pointer = Pointer(_handleSignal);
-	let _tasks = [];
+	let _windows = [];
 	
 	for (let i = 0; i < 4; ++i) {
-		_tasks.push(Window(i === 0, i, _handleSignal));
+		_windows.push(Window(i === 0, i, _handleSignal));
 	}
 
 	function _gameOver(iIndex) {
 		_oldIndex = iIndex;
 		_endGame = Engine.getCounter() + 50;
-		// _self.dom.appendChild(Dom.div(_class.over, {style:_gameOverPositions[iIndex]}));
-		// Engine.stop(Engine.GAME_OVER);
 	}
 
 	function _handleSignal(sSignal, vData) {
@@ -63,22 +61,25 @@ export default function() {
 				_gameOver(vData);
 				break;
 			case 'next':
-				_tasks[_oldIndex].active(false);
-				_tasks[vData].active(true);
+				_windows[_oldIndex].active(false);
+				_windows[vData].active(true);
 				_oldIndex = (_oldIndex + 1) % 4;
 				break;
 			case 'restart':
-				_tasks.forEach(mTask => {
-					mTask.remove();
-					mTask.restart();
-				});
 				_self.dom.removeChild(_endView);
 				_endView = null;
+				_endGame = null;
+				_pointer.restart();
+				Engine.resetLevels();
+				_windows.forEach(mTask => mTask.restart());
 				Engine.restart();
 				break;
 			case 'solved':
 				_pointer.next(vData);
 				break;
+case 'next_menu':
+	Engine.stop();
+	break;
 		}
 	}
 
@@ -90,12 +91,12 @@ export default function() {
 
 			this.dom = Dom.div(_class.base, null, [
 				Dom.div(_class.row, null, [
-					_tasks[0],
-					_tasks[1]
+					_windows[0],
+					_windows[1]
 				]),
 				Dom.div(_class.row, null, [
-					_tasks[3],
-					_tasks[2]
+					_windows[3],
+					_windows[2]
 				]),
 				_pointer
 			]);
@@ -103,15 +104,8 @@ export default function() {
 			return this.dom;
 		},
 
-		restart() {
-			_endGame = null;
-			_pointer.restart();
-			_tasks.forEach(mTask => mTask.restart());
-		},
-
 		update(iCounter) {
 			if (_endGame) {
-console.log('END');
 				if (iCounter >= _endGame) {
 					Engine.stop(Engine.GAME_OVER);
 					_endView = Dom.div(_class.over, {style:_gameOverPositions[_oldIndex]}, [
@@ -123,10 +117,10 @@ console.log('END');
 				}
 			} else {
 				_pointer.update(iCounter);
-				_tasks[0].update(iCounter);
-				_tasks[1].update(iCounter);
-				_tasks[2].update(iCounter);
-				_tasks[3].update(iCounter);
+				_windows[0].update(iCounter);
+				_windows[1].update(iCounter);
+				_windows[2].update(iCounter);
+				_windows[3].update(iCounter);
 			}
 		}
 	};
