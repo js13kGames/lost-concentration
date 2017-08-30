@@ -6,7 +6,10 @@ let _count = 0;
 let _firstTask = true;
 let _levels = [];
 let _nextTypeIndex = 0;
+let _paused;
 let _score = 0;
+//!!!!TUTORIAL
+let _taskList = [];
 let _taskTypes = ['dots', 'elvis', 'math', 'memory', 'repeat', 'same', 'subtract'];
 
 
@@ -98,8 +101,18 @@ export default {
 		document.body.appendChild(mStage.render());
 		
 		Loop.setUpdate(_update);
-		Loop.start();
 		this.started = true;
+
+		if (!_paused) Loop.start();
+	},
+
+
+//!!!!TUTORIAL
+	// nextBufferedTaskType()
+	// ...
+	nextBufferedTaskType() {
+	console.log('Buff', _taskList);
+		return _taskList.shift();
 	},
 
 
@@ -108,6 +121,8 @@ export default {
 	// ones which have been displayed less recently.
 	// Returns a string with the type of secondary task ("dots|memory|...").
 	nextTaskType() {
+//!!!!TUTORIAL
+let sRet;
 		let iChk = 3;
 		let iIndex = _taskTypes.length - 1;
 		let iRnd = this.randomInt(1, 100);
@@ -117,10 +132,28 @@ export default {
 			iChk *= 2;
 		}
 
-		return _taskTypes.splice(Math.max(0, iIndex), 1)[0];
+//!!!!TUTORIAL
+sRet = _taskTypes.splice(Math.max(0, iIndex), 1)[0];
+_taskList.push(sRet);
+return sRet;
+		// return _taskTypes.splice(Math.max(0, iIndex), 1)[0];
 		// return 'elvis';
 	},
 
+
+//!!!!TUTORIAL
+// pause(bPause)
+// ...
+pause(bPause) {
+	_paused = bPause;
+
+	if (bPause) {
+console.log('Pause');
+		Loop.stop();
+	} else {
+		Loop.start();
+	}
+},
 
 	// randomInt(iMin, iMax)
 	// ...

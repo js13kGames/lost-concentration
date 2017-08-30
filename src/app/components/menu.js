@@ -20,28 +20,45 @@ const _class = {
 	})
 };
 
-export default function() {
-	let _self;
+export default function(fSignal) {
+	let _self, _timeout;
 	let _oldIndex = 0;
-	let _pointer = Pointer(_handleSignal);
+	let _pointer = Pointer(_handleSignal, true);
 	let _windows = [];
 	
 	for (let i = 0; i < 4; ++i) {
 		_windows.push(Window(i === 0, i, _handleSignal));
 	}
 
+	_timeout = window.setTimeout(() => _pointer.flash(true), 8000);
+
 	function _handleSignal(sSignal, vData) {
+		function __clearFlash() {
+			if (_timeout) window.clearTimeout(_timeout);
+			_timeout = null;
+			_pointer.flash(false);
+		}
+
 		if (sSignal === 'next') {
 			_windows[_oldIndex].active(false);
 			_windows[vData].active(true);
 			_oldIndex = (_oldIndex + 1) % 4;
+		} else if (sSignal === 'start') {
+			__clearFlash();
+			fSignal(vData);
 		} else {
+			window.clearTimeout(_timeout);
+			__clearFlash();
 			_pointer.next();
 		}
 	}
 
 	return {
 		dom: null,
+
+		remove() {
+			_windows.forEach(dWindow => dWindow.remove());
+		},
 
 		render() {
 			_self = this;

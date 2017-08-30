@@ -31,15 +31,22 @@ const _class = {
 		'justify-content': 'center',
 		'position': 'absolute',
 	}),
+	flash: Dom.addStyle('$main-pointer-flash', {
+		'!border-radius': 10.5,
+		'!border-width': 10.5,
+		'!left': 39.5,
+		'!top': 39.5,
+	})
 };
 
 
-// Create(fSignal)
+// Create(fSignal, bMenu)
 // Creates a round component in center of screen which points to the active task.
 // 		fSignal	- Callback function for passing information back to parent.
+// 		bMenu		- True if component is being used for the menu (instead of on the game screen).
 // Returns an object which represents a component.
-export default function(fSignal) {
-	let _extra, _self;
+export default function(fSignal, bMenu) {
+	let _extra, _intvl, _self;
 	let _extraTime = 0;
 	let _rotation = 45;
 	let _rotateAt = SWITCH_TIME;
@@ -56,6 +63,22 @@ export default function(fSignal) {
 	return {
 		dom: null,
 
+		flash(bStart) {
+			if (bStart) {
+				let iToggle = 0;
+				_intvl = window.setInterval(() => {
+					if (++iToggle % 2 === 0) {
+						if (iToggle % 20 < 4) this.dom.classList.add(_class.flash);
+					} else {
+						this.dom.classList.remove(_class.flash);
+					}
+				}, 100);
+			} else {
+				window.clearInterval(_intvl);
+				this.dom.classList.remove(_class.flash);
+			}
+		},
+
 		next(bExtra) {
 			if (Engine.started) {
 				if (bExtra) {
@@ -70,10 +93,12 @@ export default function(fSignal) {
 		},
 
 		render() {
+			let vClasses = bMenu ? [_class.base, 'menu-pointer'] : _class.base;
+
 			_self = this;
 			_extra = Dom.div(_class.time, null);
 
-			this.dom = Dom.div(_class.base, {style:'transform:rotate(45deg)', click:_handleClick}, _extra);
+			this.dom = Dom.div(vClasses, {style:'transform:rotate(45deg)', click:_handleClick}, _extra);
 
 			return this.dom;
 		},

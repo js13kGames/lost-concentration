@@ -32,7 +32,7 @@ export default {
 	// 								selector is generated using the pattern "d{index}" where index is a value which starts at 1 and is 
 	// 								incremented every time a new selector is generated. This allows the system to generate short class 
 	// 								names which are guaranteed to be unique.
-	// 		vRules		- Object or string with rules for the style.
+	// 		vRules		- Object or string with rules for the style. See the resolveStyles() method for more info.
 	// 		oPseudo		- [null] Additional generic object for defining pseudo classes for the class. The object's keys are 
 	// 								the pseudo class names and the values are the rules.
 	// Returns the selector used for the new rule which may be different from the one supplied (if $ prepended).
@@ -70,6 +70,31 @@ export default {
 		}
 
 		return bScoped ? sRet.substr(1) : sRet;
+	},
+
+
+	// addStyles(oStyles)
+	// ...
+	addStyles(oStyles) {
+		Object.keys(oStyles).forEach(sSel => this.addStyle(sSel, oStyles[sSel]));
+	},
+
+
+	// button(vClass, oAttr, vContent[, iIndex])
+	// ...
+	button(vClass, oAttr, vContent, iIndex = 0) {
+		let bArray = Array.isArray(vContent);
+		let sLabel = bArray ? vContent[iIndex] : vContent;
+
+		oAttr = oAttr || {};
+
+		if (bArray) {
+			oAttr.click = function(oEvt) {
+				oEvt.target.innerText = aLabels[++iIndex % vContent.length];
+			}
+		}
+
+		return this.createElement('button', vClass, oAttr, sLabel);
 	},
 
 
@@ -127,6 +152,20 @@ export default {
 	},
 
 
+	// li([vClass[, oAttr[, vContent]]])
+	// Shortcut for creating a 'li' element. See .createElement() for details.
+	li(vClass, oAttr, vContent) {
+		return this.createElement('li', vClass, oAttr, vContent);
+	},
+
+
+	// ul()
+	// ...
+	ul(vClass, oAttr, aItems) {
+		return this.createElement('ul', vClass, oAttr, aItems.map(sItem => this.li(null, null, sItem)));
+	},
+
+
 	// resolveStyles(oStyles[, oAddl])
 	// Resolve styles which rely on units which are not known until game is launched.
 	// 		oStyles	- Generic object where keys are the names of styles and values which need to be resolved. All numeric 
@@ -134,6 +173,8 @@ export default {
 	// 							checks if the string is the name of a key on the oAddl argument and uses the value of the key if it 
 	// 							is. Otherwise, the string is used as the value for the style. Any equal signs (=) in a string are 
 	// 							also replaced by "vh" or "vw" so strings like "10= solid black" are resolved to "10vh solid black".
+	// 							You can also mark a rule as important by prepending an exclamation mark (!) to the key. This will 
+	// 							append the string "!important" to the rule value.
 	// 							NOTE: Numeric values which should not have the default unit appended to them must be passed as 
 	// 							strings instead.
 	// 		oAddl		- [null] Generic object which can be used to provide additional values which must be set at run-time 
@@ -145,8 +186,15 @@ export default {
 		let sRet = '';
 
 		Object.keys(oStyles).forEach(sKey => {
-			let sVal;
+			let sImp, sVal;
 			let vVal = oStyles[sKey];
+
+			if (sKey[0] === '!') {
+				sKey = sKey.substr(1);
+				sImp = ' !important'
+			} else {
+				sImp = '';
+			}
 
 			if (typeof vVal === 'number') {
 				sVal = vVal + this.UNIT;
@@ -158,7 +206,7 @@ export default {
 				sVal = vVal;
 			}
 
-			sRet += `${sKey}:${sVal};`;
+			sRet += `${sKey}:${sVal}${sImp};`;
 		});
 
 		return sRet;

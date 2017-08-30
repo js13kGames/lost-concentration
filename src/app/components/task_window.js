@@ -139,6 +139,11 @@ export default function(bActive, iIndex, fSignal) {
 			}
 		},
 
+//!!!!TUTORIAL
+getType() {
+	return _task.type;
+},
+
 		remove() {
 			_task.remove();
 		},

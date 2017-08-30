@@ -1,6 +1,7 @@
 import Engine from '../engine'
 import Dom from '../dom'
 import Pointer from './pointer'
+import Tutorial from './tutorial'
 import Window from './task_window'
 
 const UNIT = Dom.UNIT;
@@ -64,6 +65,9 @@ export default function() {
 				_windows[_oldIndex].active(false);
 				_windows[vData].active(true);
 				_oldIndex = (_oldIndex + 1) % 4;
+//!!!!TUTORIAL
+console.log('Task Selected', vData, _windows[vData].getType());
+Tutorial.show(_self.dom, {index:vData, type:_windows[vData].getType()});
 				break;
 			case 'restart':
 				_self.dom.removeChild(_endView);
@@ -101,6 +105,8 @@ case 'next_menu':
 				_pointer
 			]);
 			
+//!!!!TUTORIAL
+Tutorial.show(this.dom, {index:0, type:Engine.nextBufferedTaskType()});
 			return this.dom;
 		},
 
