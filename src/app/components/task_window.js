@@ -11,8 +11,8 @@ import Repeat from '../tasks/repeat'
 import Same from '../tasks/same'
 import Subtract from '../tasks/subtract'
 
-const ATTEMPTS = 3;
 const POINTS = 100;
+const ATTEMPTS = [4, 3, 2];
 
 const ACTIVE = 'opacity:0;transition-delay:.8s;z-index:-99;';
 const INACTIVE = 'opacity:0.65;transition-delay:0s;z-index:99;';
@@ -81,14 +81,16 @@ function _createTask(iIndex, fSignal) {
 }
 
 
-// Create(bActive, iIndex, fSignal)
+// Create(bActive, iIndex, iLevel, fSignal)
 // Creates a task window which is one of the four areas on the stage where random tasks are presented.
 // 		bActive	- Does this window begin as the active window (able to be interacted with)?
 // 		iIndex	- Index of window window (0:TopLeft, 1:TopRight, 2:BottomRight, 3:BottomLeft).
+// 		iLevel	- Level (0:Easy, 1:hard, 2:Insane).
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
-export default function(bActive, iIndex, fSignal) {
+export default function(bActive, iIndex, iLevel, fSignal) {
 	let _attempt, _completed, _domBack, _domComp, _levelInd, _self, _task;
+	let _attemptsAllowed = ATTEMPTS[iLevel];
 
 	function _clear() {
 		_completed = false;
@@ -107,7 +109,7 @@ export default function(bActive, iIndex, fSignal) {
 			_removeTask(mTask);
 			_domComp.classList.remove('hidden');
 			_completed = true;
-			Engine.adjustScore(POINTS * (ATTEMPTS - mTask.attempt + 1));
+			Engine.adjustScore(POINTS * (_attemptsAllowed - mTask.attempt + 1));
 			fSignal(sSignal, mTask.attempt === 1);
 		}
 	}
@@ -133,16 +135,15 @@ export default function(bActive, iIndex, fSignal) {
 			} else if (_task) {
 				_domBack.setAttribute('style', INACTIVE);
 				_attempt.setAttempt(++_task.attempt);
-				if (_task.attempt > ATTEMPTS) {
+				if (_task.attempt > _attemptsAllowed) {
 					fSignal('game_over', iIndex);
 				}
 			}
 		},
 
-//!!!!TUTORIAL
-getType() {
-	return _task.type;
-},
+		getType() {
+			return _task.type;
+		},
 
 		remove() {
 			_task.remove();
@@ -151,7 +152,7 @@ getType() {
 		render() {
 			_self = this;
 			_task = _createTask(iIndex, _handleSignal);
-			_attempt = Attempts(ATTEMPTS, iIndex);
+			_attempt = Attempts(_attemptsAllowed, iIndex);
 
 			_domBack = Dom.div(_class.backdrop, {style:bActive ? ACTIVE : INACTIVE});
 			_domComp = Dom.div([_class.complete, 'hidden'], null, 'COMPLETE!');

@@ -120,8 +120,6 @@ export default {
 			Engine.pause(false);
 		}
 
-console.log('Show Tutorial');
-console.log(oTask.type, ', ', _shown.indexOf(oTask.type));
 		if (_shown.indexOf(oTask.type) < 0) {
 			Engine.pause(true);
 			

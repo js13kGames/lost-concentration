@@ -85,7 +85,7 @@ export default {
 		let dRet = _createSvg('svg', {viewBox:'0 0 100 100'});
 		let sRgb = _hexToRgb(sColor.substr(1));
 		let oAttr = _shapes[sShape];
-// console.log(sShape, oAttr);
+
 		oAttr.style = `fill: ${sRgb};`;
 		dRet.appendChild(_createSvg('path', oAttr));
 

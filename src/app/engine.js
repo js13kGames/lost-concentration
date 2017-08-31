@@ -8,7 +8,6 @@ let _levels = [];
 let _nextTypeIndex = 0;
 let _paused;
 let _score = 0;
-//!!!!TUTORIAL
 let _taskList = [];
 let _taskTypes = ['dots', 'elvis', 'math', 'memory', 'repeat', 'same', 'subtract'];
 
@@ -107,11 +106,9 @@ export default {
 	},
 
 
-//!!!!TUTORIAL
 	// nextBufferedTaskType()
 	// ...
 	nextBufferedTaskType() {
-	console.log('Buff', _taskList);
 		return _taskList.shift();
 	},
 
@@ -121,8 +118,7 @@ export default {
 	// ones which have been displayed less recently.
 	// Returns a string with the type of secondary task ("dots|memory|...").
 	nextTaskType() {
-//!!!!TUTORIAL
-let sRet;
+		let sRet;
 		let iChk = 3;
 		let iIndex = _taskTypes.length - 1;
 		let iRnd = this.randomInt(1, 100);
@@ -132,28 +128,25 @@ let sRet;
 			iChk *= 2;
 		}
 
-//!!!!TUTORIAL
-sRet = _taskTypes.splice(Math.max(0, iIndex), 1)[0];
-_taskList.push(sRet);
-return sRet;
-		// return _taskTypes.splice(Math.max(0, iIndex), 1)[0];
-		// return 'elvis';
+		sRet = _taskTypes.splice(Math.max(0, iIndex), 1)[0];
+		_taskList.push(sRet);
+
+		return sRet;
 	},
 
 
-//!!!!TUTORIAL
-// pause(bPause)
-// ...
-pause(bPause) {
-	_paused = bPause;
+	// pause(bPause)
+	// ...
+	pause(bPause) {
+		_paused = bPause;
 
-	if (bPause) {
-console.log('Pause');
-		Loop.stop();
-	} else {
-		Loop.start();
-	}
-},
+		if (bPause) {
+			Loop.stop();
+		} else {
+			Loop.start();
+		}
+	},
+
 
 	// randomInt(iMin, iMax)
 	// ...
@@ -229,10 +222,8 @@ console.log('Pause');
 	// restart()
 	// ...
 	restart() {
-		console.log('Restart game');
 		_count = _points = 0;
 		this.stopped = false;
-		// _stage.restart();
 		Loop.start();
 	},
 
@@ -249,7 +240,6 @@ console.log('Pause');
 	stop(iCode) {
 		this.stopped = true;
 		Loop.stop();
-console.log('Engine Stopped', iCode);
 	},
 
 

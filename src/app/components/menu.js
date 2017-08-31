@@ -23,7 +23,7 @@ const _class = {
 export default function(fSignal) {
 	let _self, _timeout;
 	let _oldIndex = 0;
-	let _pointer = Pointer(_handleSignal, true);
+	let _pointer = Pointer(-1, _handleSignal);
 	let _windows = [];
 	
 	for (let i = 0; i < 4; ++i) {

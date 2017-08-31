@@ -1,8 +1,8 @@
 import Engine from '../engine'
 import Dom from '../dom'
 
-const SWITCH_TIME = 500;
-// const SWITCH_TIME = 380;
+const SWITCH_TIME = [700, 500, 400];
+
 const _class = {
 	base: Dom.addStyle('$main-pointer', {
 		'align-items': 'center',
@@ -40,16 +40,17 @@ const _class = {
 };
 
 
-// Create(fSignal, bMenu)
+// Create(iLevel, fSignal)
 // Creates a round component in center of screen which points to the active task.
+// 		iLevel	- Level (0:Easy, 1:hard, 2:Insane) or -1 if pointer is for the menu.
 // 		fSignal	- Callback function for passing information back to parent.
-// 		bMenu		- True if component is being used for the menu (instead of on the game screen).
 // Returns an object which represents a component.
-export default function(fSignal, bMenu) {
+export default function(iLevel, fSignal) {
 	let _extra, _intvl, _self;
 	let _extraTime = 0;
+	let _switchTime = SWITCH_TIME[iLevel >= 0 ? iLevel : 0];
 	let _rotation = 45;
-	let _rotateAt = SWITCH_TIME;
+	let _rotateAt = _switchTime;
 
 	// _handleClick
 	function _handleClick(oEvt) {
@@ -93,7 +94,7 @@ export default function(fSignal, bMenu) {
 		},
 
 		render() {
-			let vClasses = bMenu ? [_class.base, 'menu-pointer'] : _class.base;
+			let vClasses = iLevel === -1 ? [_class.base, 'menu-pointer'] : _class.base;
 
 			_self = this;
 			_extra = Dom.div(_class.time, null);
@@ -104,15 +105,15 @@ export default function(fSignal, bMenu) {
 		},
 
 		restart() {
-			_rotateAt = SWITCH_TIME;
+			_rotateAt = _switchTime;
 		},
 
 		update(iCounter) {
 			if (iCounter >= _rotateAt) {
-				_rotateAt = iCounter + SWITCH_TIME;
+				_rotateAt = iCounter + _switchTime;
 				_rotation += 90;
 				if (_extraTime) {
-					_rotateAt = iCounter + SWITCH_TIME + _extraTime;
+					_rotateAt = iCounter + _switchTime + _extraTime;
 				}
 				_self.dom.setAttribute('style', `transform:rotate(${_rotation}deg)`);
 				fSignal('next', (_rotation % 360 - 45) / 90);

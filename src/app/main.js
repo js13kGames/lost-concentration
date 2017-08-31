@@ -6,16 +6,14 @@ import DynamicStyles from './styles'
 import Tutorial from './components/tutorial'
 
 // localStorage.clear();
-
 let mMenu = Menu((oSettings) => {
 	localStorage.setItem('settings', JSON.stringify(oSettings));
-console.dir(oSettings);
 	Audio.muted = !oSettings.sound;
 
 	mMenu.remove();
 	document.body.removeChild(mMenu.dom);
 	mMenu = null;
-	Engine.init(Stage());
+	Engine.init(Stage(oSettings.level));
 });
 
 document.body.appendChild(mMenu.render());
