@@ -1,3 +1,8 @@
+// A component representing the stage which contains all other game elements (not including the menu). Teh stage is 
+// divided into four panes (TopLeft, TopRight, BottomRight, BottomLeft) and a circular pointer in the center which 
+// "points" to the active window. Each task_window displays one of seven tasks (or puzzles). Only the active task can 
+// be interacted with and a new task replaces the old one when a task is completed.
+
 import Engine from '../engine'
 import Dom from '../dom'
 import Pointer from './pointer'

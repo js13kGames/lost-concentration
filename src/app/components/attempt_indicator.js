@@ -1,3 +1,13 @@
+// A component which displays the number of attempts allowed to solve a specific task/puzzle and which how many 
+// attempts have been used.
+// 
+// The current version displays a small circle for each allowed attempt. Open circles represent unused attempts; 
+// filled-in circles indicate used attempts (including the current attempt). For example, two filled-in circles and one 
+// open circle indicate two of three attempts used.
+// 
+// To save space, circles are represented by a single character. The greek letter Omicron (\u039F) is used for the 
+// empty circles and Theta (\u0398) is used for the filled-in circle.
+
 import Dom from '../dom'
 
 const _styles = [
@@ -23,7 +33,7 @@ function _generateIndicatorString(iAttempt, iAttempts) {
 	let sRet = '';
 
 	for (let i = 1; i <= iAttempts; ++i) {
-		sRet += (iAttempt >i ? '\u0398' : '\u039F');
+		sRet += (iAttempt > i ? '\u0398' : '\u039F');
 	}
 
 	return sRet;
@@ -47,6 +57,6 @@ export default function(iAttempts, iIndex) {
 			let sStyle = iIndex < 2 ? 'top:2px;' : 'bottom:2px;';
 			this.dom = Dom.div(_class.base, {style:sStyle}, _generateIndicatorString(1, iAttempts));
 			return this.dom;
-		},
+		}
 	}
 }

@@ -1,3 +1,7 @@
+// Game loop which eliminates timing issues.
+// Thanks to article "A Detailed Explanation of JavaScript Game Loops and Timing" which explains the issues far better 
+// than I can (http://www.isaacsukin.com/news/2015/01/detailed-explanation-javascript-game-loops-and-timing).
+
 const NOOP = function() {};
 
 let _simulationTimestep = 1000 / 60,

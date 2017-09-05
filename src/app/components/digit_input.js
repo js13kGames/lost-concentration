@@ -1,3 +1,8 @@
+// A component which displays a single digit (0 - 9) with buttons at the top and bottom. Clicking the top button (+) 
+// increases the value and clicking the bottom button (-) decreases it. Values loop around so incrementing "9" becomes 
+// "0" and decrementing "0" displays "9".
+// Used by the number_input component which is in turn used by the Simple Subtraction task.
+
 import Dom from '../dom'
 
 const _class = {

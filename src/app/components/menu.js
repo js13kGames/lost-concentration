@@ -1,3 +1,5 @@
+// A Component which is a container for the main menu. Equivalent to the stage component of the actual game.
+
 import Dom from '../dom'
 import Pointer from './pointer'
 import Window from './menu_window'
@@ -18,6 +20,11 @@ const _class = {
 	})
 };
 
+
+// Create(fSignal)
+// Creates a component representing the "stage" for the main menu.
+// 		fSignal	- Callback function for passing information back to parent.
+// Returns an object which represents a component.
 export default function(fSignal) {
 	let _self, _timeout;
 	let _oldIndex = 0;

@@ -1,3 +1,7 @@
+// A component which dsplays one or more digits (0 - 9) each of which has a button above for incrementing the digit and 
+// a button below for decrementing it.
+// Used by the Simple Subtraction task.
+
 import Dom from '../dom'
 import Digit from './digit_input'
 

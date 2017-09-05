@@ -1,3 +1,7 @@
+// Provides an object with methods for creating dynamic DOM elements.
+// Inspired by hyperscript (https://github.com/hyperhype/hyperscript) but not nearly as robust since functionality is 
+// limited to what is required by this project.
+
 let _dynamicSelectors = {};
 let _nextId = 0;
 
@@ -23,6 +27,7 @@ function _addContent(dParent, vContent) {
 
 
 export default {
+	
 	// UNIT
 	// Contains the unit of measurement for all game components. Either 'vh' or 'vw' depending on the height to width 
 	// ratio of the document. The smaller of the two units is always used.

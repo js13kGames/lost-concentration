@@ -1,3 +1,6 @@
+// A component representing the 3/4 circle in the center of the screen which rotates to indicate the active window or 
+// task/puzzle. The pie shape is created using css border styling.
+
 import Engine from '../engine'
 import Dom from '../dom'
 

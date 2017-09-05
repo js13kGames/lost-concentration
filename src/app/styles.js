@@ -1,7 +1,7 @@
 // Creates a number of dynamic styles which cannot be determined until runtime because they rely on size or positions 
 // which are dependent on the height to width ratio of the document body.
 // Positions and sizes use the smaller of 'vh' or 'vw'.
-// 
+
 import Dom from './dom'
 
 Dom.addStyles({

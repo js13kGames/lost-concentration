@@ -1,3 +1,6 @@
+// A component representing a single task window. The task window can contain one of seven different tasks.
+// Used by the stage component.
+
 import Attempts from '../components/attempt_indicator'
 import Audio from '../audio'
 import Dom from '../dom'

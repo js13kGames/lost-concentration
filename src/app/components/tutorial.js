@@ -1,3 +1,6 @@
+// An object which is used to display tutorial information for one of the seven different tasks (or puzzles) displayed 
+// in the task windows during game play.
+
 import Dom from '../dom'
 import Engine from '../engine'
 

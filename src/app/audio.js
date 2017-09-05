@@ -1,3 +1,5 @@
+// Provides an object with methods for playing simple sounds.
+
 let _audioContext = window.hasOwnProperty('AudioContext') ? new window.AudioContext() : null;
 
 export default {

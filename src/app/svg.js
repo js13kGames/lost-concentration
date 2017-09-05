@@ -1,3 +1,5 @@
+// Provides an object with methods for creating a limited number of dynamic SVG elements.
+
 const NS = 'http://www.w3.org/2000/svg';
 
 const _shapes = {

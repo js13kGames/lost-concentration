@@ -1,3 +1,6 @@
+// A component which represents a tile with a colored shape depicted on it. Shapes are created using svg elements.
+// Used by the Memory Master and Same Same tasks.
+
 import Dom from '../dom'
 import Svg from '../svg'
 

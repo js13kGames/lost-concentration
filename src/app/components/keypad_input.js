@@ -1,3 +1,6 @@
+// A component which resembles a numeric keypad and can be used as a multi-digit numerical input.
+// Used by the Shape_stitution task.
+
 import Dom from '../dom'
 
 const _class = {
@@ -28,7 +31,7 @@ const _class = {
 
 // Create(dAnswer, fSignal)
 // Creates a component which displays a keypad for entering a number.
-// 		DAnswer	- Dom element (box) which will contain the answer.
+// 		dAnswer	- Dom element (box) which will contain the answer.
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(dAnswer, fSignal) {

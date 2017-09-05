@@ -1,3 +1,8 @@
+// Provides an object with methods for defining gameplay including the game loop. Also provides a number of general 
+// utility methods such as randomInt().
+
+// Once the engine is initialized, the stage component's update() method is called every update cycle of the game loop.
+
 import Loop from './loop'
 import Levels from './levels'
 
@@ -31,7 +36,7 @@ export default {
 
 	// adjustScore(iAmount)
 	// Adjust the score.
-	// 		iAmount	- Amoun to adjust the score by.
+	// 		iAmount	- Amount to adjust the score by.
 	adjustScore(iAmount) {
 		_score += iAmount;
 	},
@@ -57,7 +62,6 @@ export default {
 				if (iNdx === 0) {
 					oPrev = oLvl;
 				} else {
-					// oPrev = Object.assign({}, oPrev);
 					oPrev = Object.assign({}, oPrev);
 					Object.keys(oLvl).forEach(sKey => {
 						oPrev[sKey] = oLvl[sKey];

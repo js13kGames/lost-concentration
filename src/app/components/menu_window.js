@@ -1,3 +1,6 @@
+// A component which represents a single pane of the main menu. The menu creates four of this component (TopLeft, 
+// TopRight, BottomRight, and BottomLeft). Each contains either a "play" button (Easy|Hard|Insane) or instructions.
+
 import Dom from '../dom'
 import Tutorial from './tutorial'
 
