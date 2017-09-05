@@ -101,7 +101,7 @@ export default {
 
 		if (bArray) {
 			oAttr.click = function(oEvt) {
-				oEvt.target.innerText = aLabels[++iIndex % vContent.length];
+				oEvt.target.innerText = vContent[++iIndex % vContent.length];
 			}
 		}
 

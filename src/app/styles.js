@@ -12,4 +12,15 @@ Dom.addStyles({
 
 	'.tutorial': {background:'#B8860B', 
 			'box-shadow':'2px 2px 4px black', color:'#FFFFFF', position:'absolute', width:50, 'z-index':'9999'},
+
+	'.window-inactive': {
+		background: '#000000',
+		height: '100%',
+		left: '0',
+		opacity: '0.65',
+		position: 'absolute',
+		top: '0',
+		transition: 'opacity .6s ease-out',
+		width: '100%'
+	}
 })

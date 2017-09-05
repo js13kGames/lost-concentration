@@ -25,14 +25,6 @@ const _class = {
 		'flex-direction': 'column',
 		'position': 'relative'
 	}),
-	backdrop: Dom.addStyle('$task-back', {
-		background: '#000000',
-		height: '100%',
-		opacity: '0.65',
-		position: 'absolute',
-		transition: 'opacity .6s ease-out',
-		width: '100%'
-	}),
 	complete: Dom.addStyle('$task-complete', {
 		'align-items': 'center',
 		'background': 'green',
@@ -154,7 +146,7 @@ export default function(bActive, iIndex, iLevel, fSignal) {
 			_task = _createTask(iIndex, _handleSignal);
 			_attempt = Attempts(_attemptsAllowed, iIndex);
 
-			_domBack = Dom.div(_class.backdrop, {style:bActive ? ACTIVE : INACTIVE});
+			_domBack = Dom.div('window-inactive', {style:bActive ? ACTIVE : INACTIVE});
 			_domComp = Dom.div([_class.complete, 'hidden'], null, 'COMPLETE!');
 			_levelInd = Dom.div(_class.level, {style:_levelStyles[iIndex]}, 'Level ' + (_task.levelInfo.level + 1));
 			

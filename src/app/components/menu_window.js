@@ -19,14 +19,6 @@ const _class = {
 		'font-size': 4,
 		'font-weight': 'bold'
 	}),
-	backdrop: Dom.addStyle('$menu-back', {
-		background: '#000000',
-		height: '100%',
-		opacity: '0.65',
-		position: 'absolute',
-		transition: 'opacity .6s ease-out',
-		width: '100%'
-	}),
 	play: Dom.addStyle('$menu-play', {
 		'align-items': 'center',
 		'border-radius': '50%',
@@ -156,7 +148,7 @@ export default function(bActive, iIndex, fSignal) {
 		render() {
 			_self = this;
 			_menu = _createMenu(iIndex, _handleClick);
-			_domBack = Dom.div(_class.backdrop, {style:bActive ? ACTIVE : INACTIVE});
+			_domBack = Dom.div('window-inactive', {style:bActive ? ACTIVE : INACTIVE});
 			
 			this.dom = Dom.div(_class.base, null, _menu.concat(_domBack));
 

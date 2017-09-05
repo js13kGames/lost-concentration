@@ -6,7 +6,6 @@ const SWITCH_TIME = [700, 500, 400];
 const _class = {
 	base: Dom.addStyle('$main-pointer', {
 		'align-items': 'center',
-		'background': '#F0F0F0',
 		'border-bottom': '10= solid #000000',
 		'border-left': '10= solid transparent',
 		'border-radius': '10=',
