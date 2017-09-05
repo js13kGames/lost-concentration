@@ -21,7 +21,7 @@ const _class = {
 // Create(oTile, iIndex, bToggle, fSignal)
 // Creates a component which displays a tile with a colored shape.
 // 		oTile		- Object with color and shape properties for tile.
-// 		iIndex	- ...
+// 		iIndex	- Index of tile within enclosing puzzle.
 // 		bToggle	- Tiles toggle when clicked (for memory task).
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
@@ -61,10 +61,7 @@ export default function(oTile, iIndex, bToggle, fSignal) {
 
 		show() {
 			_shape.setAttribute('style', SHOW);
-		},
+		}
 
-		// update(iCounter) {
-
-		// }
 	}
 }

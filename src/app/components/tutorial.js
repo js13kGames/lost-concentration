@@ -35,7 +35,7 @@ const _info = {
 		]
 	},
 	elvis: {
-		a: "Where's Elvis",
+		a: "Where's Elvis?",
 		b: [
 			'Several balls are bouncing around the screen.',
 			'One of them is labeled "ELVIS".',
@@ -44,7 +44,7 @@ const _info = {
 		]
 	},
 	math: {
-		a: 'Math with Shapes',
+		a: 'Shape_stitution',
 		b: [
 			'Each line represents a simple math expression which must be solved.',
 			'Figure out what number is represented by the shape on the first line.',
@@ -69,16 +69,16 @@ const _info = {
 			'The tile must be clicked the number of times listed in the associated square.',
 			'For instance, a red square with a "2" means you have to click twice on the red tile.',
 			'Just to keep you on your toes, the tiles randomly change positions when clicked.',
-			"There's also no progress indicator so try not to lose your place when interrupted."
+			"There's no progress indicator so try not to lose your place when interrupted."
 		]
 	},
 	same: {
 		a: 'Same Same',
 		b: [
 			'The grid displays a number of tiles with different shapes and colors.',
-			'Find (and click on) the two which the same shape AND color.',
+			'Find (and click on) the two which show the same shape AND color.',
 			"That's it, really. Nothing to remember. No chance of losing your place.",
-			'It is surprisingly distracting, though',
+			'It is surprisingly distracting, though.',
 			'Try not to lose your place in other puzzles while solving this one.'
 		]
 	},
@@ -87,7 +87,7 @@ const _info = {
 		b: [
 			'Subtract the number on the second line from the number on the first line.',
 			'Enter a solution using buttons above/below placeholders on the third line.',
-			'You will probably always be required to regroup and carry at least once.',
+			'You will always be required to regroup and carry at least once.',
 			'Can you keep from losing your concentration after being interrupted?'
 		]
 	}
@@ -97,8 +97,10 @@ let _shown = localStorage.getItem('tutorialsShown');
 _shown = _shown ? JSON.parse(_shown) : [];
 
 export default {
+
 	// reset([bReset])
-	// ...
+	// Reset and save the persistent flag for whether tutorials have been shown.
+	// 		bReset	- If true, flags for tutorials shown are all reset to false before values are saved to local storage.
 	reset(bReset) {
 		if (bReset) {
 			_shown = [];
@@ -109,7 +111,11 @@ export default {
 
 
 	// show(dStage, oTask)
-	// ...
+	// Show the tutorial for the specified task/puzzle.
+	// 		dStage	- DOM element representing the game stage.
+	// 		oTask		- Generic object with information about the task o display tutorial for:
+	// 								index	- Index of task window containing the puzzle (0:TopLeft, 1:TopRight, 2:BtmRight, 3:BtmLeft).
+	// 								type	- String with type of task/puzzle (e.g. 'dots', 'repeat', etc).
 	show(dStage, oTask) {
 		let sStyle, oInfo, dDiv;
 
@@ -132,6 +138,7 @@ export default {
 			dDiv = Dom.div('tutorial', {style:sStyle}, [
 				Dom.div(_class.title, null, oInfo.a),
 				Dom.ul(_class.text, null, oInfo.b),
+				Dom.div(null, {style:'font-weight:bold;text-align:center;'}, '#concentrationlost'),
 				Dom.div(_class.title, null, Dom.createElement('button', null, {click:__handleClick}, 'Close'))
 			]);
 

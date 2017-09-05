@@ -25,13 +25,11 @@ const _class = {
 		'width': 30
 	}),
 	gridCol: Dom.addStyle('$memory-col', {
-		// background: '#A0A0A0',
 		display: 'flex',
 		flex: '1',
 		margin: '1px'
 	}),
 	gridRow: Dom.addStyle('$memory-row', {
-		// background: 'blue',
 		display: 'flex',
 		flex: '1'
 	})
@@ -152,5 +150,6 @@ export default function(iIndex, fSignal) {
 				}
 			}
 		}
+		
 	};
 }

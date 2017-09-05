@@ -73,7 +73,6 @@ export default function(iIndex, fSignal) {
 	}
 
 	function _handleClick(oEvt) {
-// debugger;
 		if (oEvt.target.innerText === 'ELVIS') {
 			fSignal('solved');
 		} else {

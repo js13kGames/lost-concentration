@@ -4,7 +4,6 @@ const _class = {
 	base: Dom.addStyle('$keypad', {
 		background: 'blue',
 		color: '#C0C0C0',
-		// display: 'none',
 		position: 'absolute'
 	}),
 	row: Dom.addStyle('$keypad-row', {
@@ -29,6 +28,7 @@ const _class = {
 
 // Create(dAnswer, fSignal)
 // Creates a component which displays a keypad for entering a number.
+// 		DAnswer	- Dom element (box) which will contain the answer.
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(dAnswer, fSignal) {
@@ -68,7 +68,6 @@ export default function(dAnswer, fSignal) {
 		render() {
 			_self = this;
 
-			// this.dom = Dom.div(_class.base, {style:'display:none;', click:_handleClick}, [
 			this.dom = Dom.div(_class.base, {style:'display:none;'}, [
 				Dom.div(_class.row, null, [_createKey('7'), _createKey('8'), _createKey('9')]),
 				Dom.div(_class.row, null, [_createKey('4'), _createKey('5'), _createKey('6')]),
@@ -82,14 +81,10 @@ export default function(dAnswer, fSignal) {
 		show(bShow = true) {
 			if (bShow) {
 				this.dom.setAttribute('style', 'display:initial;');
-				// dAnswer.innerText = '';
 			} else {
 				this.dom.setAttribute('style', 'display:none;');
 			}
-		},
+		}
 
-		// update(iCounter) {
-
-		// }
 	}
 }

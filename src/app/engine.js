@@ -1,13 +1,10 @@
 import Loop from './loop'
 import Levels from './levels'
 
-let _points, _stage;
+let _paused, _score, _stage;
 let _count = 0;
-let _firstTask = true;
 let _levels = [];
 let _nextTypeIndex = 0;
-let _paused;
-let _score = 0;
 let _taskList = [];
 let _taskTypes = ['dots', 'elvis', 'math', 'memory', 'repeat', 'same', 'subtract'];
 
@@ -20,38 +17,37 @@ function _update(nDelta) {
 
 
 export default {
-	// END_LEVEL: 0,
 	GAME_OVER: 0,
 
-	// currentLevel
-	// ...
-	currentLevel: 1,
-
 	// started
-	// ...
+	// Has game engine been started?
 	started: false,
 
+
 	// stopped
-	// ...
+	// Is game engine stopped?
 	stopped: false,
 
 
 	// adjustScore(iAmount)
-	// ...
+	// Adjust the score.
+	// 		iAmount	- Amoun to adjust the score by.
 	adjustScore(iAmount) {
 		_score += iAmount;
 	},
 
 
 	// getCounter()
-	// ...
+	// Get the current value of the loop counter.
 	getCounter() {
 		return _count;
 	},
 
 
 	// getLevelInfo(sTask)
-	// ...
+	// Process data from imported level.js file and get data for next level of the specified task.
+	// 		sTask	- Name of the task/puzzle to get information for.
+	// Returns a generic object with key/value pairs specific to the task.
 	getLevelInfo(sTask) {
 		let oPrev;
 
@@ -77,23 +73,24 @@ export default {
 
 
 	// resetLevels()
-	// ...
+	// Resets the "next level" index for each task to zero.
 	resetLevels() {
 		Object.keys(_levels).forEach(sKey => _levels[sKey].nextLevel = 0);
 	},
 
 
 	// getScore()
-	// ...
+	// Returns the current score.
 	getScore() {
 		return _score;
 	},
 
 
 	// init(mStage)
-	// ...
+	// Initializes the game engine.
+	// 		mStage	- Component representing the game stage which contains all game elements.
 	init(mStage) {
-		_count = _points = 0;
+		_count = _score = 0;
 		_stage = mStage;
 		this.stopped = false;
 
@@ -107,7 +104,8 @@ export default {
 
 
 	// nextBufferedTaskType()
-	// ...
+	// Returns a string representing the oldest task type returned by all calls to the .nextTaskType() method. Ugly kluge 
+	// caused by a lack of foresight and the addition of tutorials for each task.
 	nextBufferedTaskType() {
 		return _taskList.shift();
 	},
@@ -136,7 +134,8 @@ export default {
 
 
 	// pause(bPause)
-	// ...
+	// Pauses or unpauses the game loop.
+	// 		bPause	- Pauses if true, unpauses if false.
 	pause(bPause) {
 		_paused = bPause;
 
@@ -149,34 +148,24 @@ export default {
 
 
 	// randomInt(iMin, iMax)
-	// ...
+	// Returns a random integer between iMin and iMax.
 	randomInt(iMin, iMax) {
 		return Math.floor(Math.random() * (iMax - iMin + 1) + iMin);
 	},
 
 
-	// // randomInts(iMin, iMax, iCount)
-	// // ...
-	// randomInts(iMin, iMax, iCount) {
-	// 	let aRet = [];
-
-	// 	for (let i = 0; i < iCount; ++i) {
-	// 		aRet.push(Math.floor(Math.random() * (iMax - iMin + 1) + iMin));
-	// 	}
-
-	// 	return aRet;
-	// },
-
-
 	// randomItem(aSrc)
-	// ...
+	// Returns a randomm item from the array provided. Does not modify the array.
 	randomItem(aSrc) {
 		return aSrc[this.randomInt(0, aSrc.length - 1)];
 	},
 
 
 	// randomItems(aSrc, iCount)
-	// ...
+	// Randomly selects one or more items from an array. Ensures the same item isn't returned more than once.
+	// 		aSrc		- Source array to select items from.
+	// 		iCount	- Number of items to select.
+	// Returns an array with random elements from the source array.
 	randomItems(aSrc, iCount) {
 		let aRet = [];
 		let aCopy = aSrc.slice();
@@ -190,7 +179,10 @@ export default {
 
 
 	// randomize(aSrc[, bCopy])
-	// ...
+	// Randomizes the order of elements in an array.
+	// 		aSrc	- Source array to randomize.
+	// 		bCopy	- [false] If true, a copy of the array is created and randomized instead of the source array itself.
+	// Returns the randomized array.
 	randomize(aSrc, bCopy) {
 		let aRet = bCopy ? aSrc.slice() : aSrc;
 
@@ -206,46 +198,29 @@ export default {
 	},
 
 
-	// randomNot(iMin, iMax, aEx)
-	// ...
-	randomNot(iMin, iMax, aEx) {
-		let iRet;
-
-		do {
-			iRet = Math.floor(Math.random() * (iMax - iMin + 1) + iMin);
-		} while (aEx.indexOf(iRet) >= 0);
-
-		return iRet;
-	},
-
-
 	// restart()
-	// ...
+	// Restarts the game engine.
 	restart() {
-		_count = _points = 0;
+		_count = _score = 0;
 		this.stopped = false;
 		Loop.start();
 	},
 
 
 	// returnTypeToPool(sType)
-	// ...
+	// Returns the specified task type to the pool of available types. This is part of the system which randomizes the 
+	// order tasks/puzzles are displayed but prevents mutiple copies of the same task to be displayed at once.
 	returnTypeToPool(sType) {
 		_taskTypes.push(sType);
 	},
 
 
 	// stop(iCode)
-	// ...
+	// Stops the game engine.
 	stop(iCode) {
 		this.stopped = true;
 		Loop.stop();
-	},
-
-
-	// updatePoints(iPoints)
-	// ...
-	updatePoints(iPoints) {
-		_points += iPoints;
 	}
+
+
 }

@@ -2,8 +2,6 @@ import Dom from '../dom'
 import Pointer from './pointer'
 import Window from './menu_window'
 
-const UNIT = Dom.UNIT;
-
 const _class = {
 	base: Dom.addStyle('$main-stage', {
 	  'background': '#F0F0F0',

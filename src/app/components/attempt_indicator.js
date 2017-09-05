@@ -1,18 +1,34 @@
 import Dom from '../dom'
 
 const _styles = [
-	'left:4px;top:4px;',
-	'right:4px;top:4px;',
-	'bottom:4px;right:4px;',
-	'bottom:4px;left:4px;'
+	'top:2px;',
+	'top:2px;',
+	'bottom:2px;',
+	'bottom:2px;'
 ];
 
 const _class = {
 	base: Dom.addStyle('$attempt', {
-		'font-size': 4,
-		'position': 'absolute'
+		'font-size': 1.5,
+		'font-weight': 'bold',
+		'position': 'absolute',
+		'text-align': 'center',
+		'width': '100%'
 	})
 }
+
+
+// _generateIndicatorString(iAttempt, iAttempts)
+function _generateIndicatorString(iAttempt, iAttempts) {
+	let sRet = '';
+
+	for (let i = 1; i <= iAttempts; ++i) {
+		sRet += (iAttempt >i ? '\u0398' : '\u039F');
+	}
+
+	return sRet;
+}
+
 
 // Create(iAttempts, iIndex)
 // Creates a component indicating which attempt out of how many available attempts.
@@ -24,16 +40,13 @@ export default function(iAttempts, iIndex) {
 		dom: null,
 
 		setAttempt(iAttempt) {
-			this.dom.innerText = `${iAttempt} / ${iAttempts}`;
+			this.dom.innerText = _generateIndicatorString(iAttempt, iAttempts);
 		},
 
 		render() {
-			this.dom = Dom.div(_class.base, {style:_styles[iIndex]}, '1 / ' + iAttempts);
+			let sStyle = iIndex < 2 ? 'top:2px;' : 'bottom:2px;';
+			this.dom = Dom.div(_class.base, {style:sStyle}, _generateIndicatorString(1, iAttempts));
 			return this.dom;
 		},
-
-		// update(iCounter) {
-
-		// }
 	}
 }

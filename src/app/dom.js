@@ -1,4 +1,6 @@
-let _dynamicSelectors = {$nextId:0};
+let _dynamicSelectors = {};
+let _nextId = 0;
+
 
 // _addContent(dParent, vContent)
 function _addContent(dParent, vContent) {
@@ -22,7 +24,8 @@ function _addContent(dParent, vContent) {
 
 export default {
 	// UNIT
-	// ...
+	// Contains the unit of measurement for all game components. Either 'vh' or 'vw' depending on the height to width 
+	// ratio of the document. The smaller of the two units is always used.
 	UNIT: document.body.clientHeight <= document.body.clientWidth ? 'vh' : 'vw',
 
 
@@ -46,7 +49,7 @@ export default {
 			sSelector = '.' + sSelector.substr(1);
 			sRet = _dynamicSelectors[sSelector];
 			if (!sRet) {
-				sRet = _dynamicSelectors[sSelector] = `.d${++_dynamicSelectors.$nextId}`;
+				sRet = _dynamicSelectors[sSelector] = `.d${++_nextId}`;
 			}
 		}
 
@@ -74,14 +77,22 @@ export default {
 
 
 	// addStyles(oStyles)
-	// ...
+	// Adds multiple style rules in one call. See the .addStyle() method for more info.
+	// 		oStyles	- Generic object where each key is used as a selector and the associated value is the rule.
 	addStyles(oStyles) {
 		Object.keys(oStyles).forEach(sSel => this.addStyle(sSel, oStyles[sSel]));
 	},
 
 
 	// button(vClass, oAttr, vContent[, iIndex])
-	// ...
+	// Creates an HTML button element.
+	// 		vClass		- Class or classes which are added to the new element. See .createElement() for more info.
+	// 		oAttr			- Generic object defining attributes for the element. See .createElement() for more info.
+	// 		vContent	- String with text for the button or an array of strings to automatically create a button which 
+	// 								toggles state between the items provided when clicked.
+	// 		iIndex		- [0] If an array is provided for the vContent argument, this is the index of the first string to 
+	// 								display as the label of the button.
+	// Returns the newly created element.
 	button(vClass, oAttr, vContent, iIndex = 0) {
 		let bArray = Array.isArray(vContent);
 		let sLabel = bArray ? vContent[iIndex] : vContent;
@@ -107,7 +118,7 @@ export default {
 	// 														objects with values returned by the .addStyle() method.
 	// 									other		- Treated as a string and added as the name of a class.
 	// 		oAttr			- [null] Generic object where key/value pairs are are added to the new element using the 
-	// 								Element.setAttribute() method. Any key whose value is a functioin is treated as an event and is 
+	// 								Element.setAttribute() method. Any key whose value is a function is treated as an event and is 
 	// 								added using the Element.addEventListener() method.
 	// 		vContent	- [null] Content which is added to the element using the Element.appendChild() method.
 	// 									Array		- All items are appended to the element in the order they appear in the array.
@@ -160,7 +171,11 @@ export default {
 
 
 	// ul()
-	// ...
+	// Creates an HTML UL element.
+	// 		vClass	- Class or classes which are added to the new element. See .createElement() for more info.
+	// 		oAttr		- Generic object defining attributes for the element. See .createElement() for more info.
+	// 		aItems	- Array of strings used to create LI elements inside the UL element.
+	// Returns the newly created element.
 	ul(vClass, oAttr, aItems) {
 		return this.createElement('ul', vClass, oAttr, aItems.map(sItem => this.li(null, null, sItem)));
 	},

@@ -150,7 +150,7 @@ export default function(bActive, iIndex, fSignal) {
 		},
 
 		remove() {
-			//!!! NEEDED !!!
+
 		},
 
 		render() {

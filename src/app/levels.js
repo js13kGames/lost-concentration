@@ -1,3 +1,9 @@
+// Used to dynamically create levels (1 - 10) for each of the tasks/puzzles.
+// There is an array of objects (0 - 9) for each task type.
+// The objects only need to provide keys for values which change from level to level.
+// The game engine .getLevelInfo() resolves these into objects with all keys.
+// There were intially several more properties for each task and this was an attempt to keep the code size down.
+
 export default {
 	dots: [
 		{dotCount:6},
@@ -17,10 +23,8 @@ export default {
 		{count:8},
 		{count:10, velocity:12},
 		{},
-		
 		{count:12},
 		{},
-
 		{},
 		{},
 		{},

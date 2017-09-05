@@ -21,8 +21,8 @@ const _class = {
 
 // Create(vValue, iIndex, fSignal)
 // Creates a component allowing a single digit to be chosen using mouse clicks.
-// 		vValue	- ...
-// 		iIndex	- ...
+// 		vValue	- Initial value for the digit.
+// 		iIndex	- Index of digit within enclosing number_input.
 // 		fSignal	- Callback function for passing information back to parent.
 // Returns an object which represents a component.
 export default function(vValue, iIndex, fSignal) {
@@ -56,10 +56,7 @@ export default function(vValue, iIndex, fSignal) {
 		render() {
 			this.dom = Dom.div(_class.base, null, [_incBtn, _digit, _decBtn]);
 			return this.dom;
-		},
-
-		// update(iCounter) {
-
-		// }
+		}
+		
 	}
 }

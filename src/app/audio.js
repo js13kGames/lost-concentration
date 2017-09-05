@@ -1,12 +1,14 @@
 let _audioContext = window.hasOwnProperty('AudioContext') ? new window.AudioContext() : null;
 
 export default {
+
 	// muted
-	// ...
+	// If set to true, sounds do not play.
 	muted: false,
 
 
 	// correct()
+	// Plays the sound for a correct choice.
 	correct() {
 		let nTime, mGain, mOsc;
 
@@ -30,7 +32,7 @@ export default {
 
 
 	// incorrect()
-	// ...
+	// Plays the sound for an incorrect choice.
 	incorrect() {
 		let nTime, mGain1, mGain2, mOsc1, mOsc2;
 

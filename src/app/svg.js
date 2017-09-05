@@ -80,7 +80,11 @@ function _createSvg(sTag, oAttr) {
 export default {
 
 	// shape(sShape, sColor)
-	// ...
+	// Creates an HTML SVG element for the specified shape.
+	// 		sShape	- String with one of ?? predefined shapes:
+	// 							('gear|octagon|pacman|pentagon|reuleaux|ring|star|starburst|triangleDown|triangleUp').
+	// 		sColor	- Color for the shape in hex format (i.e. '#FFFFFF').
+	// Returns an SVG element.
 	shape(sShape, sColor) {
 		let dRet = _createSvg('svg', {viewBox:'0 0 100 100'});
 		let sRgb = _hexToRgb(sColor.substr(1));

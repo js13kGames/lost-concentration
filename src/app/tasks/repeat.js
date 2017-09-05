@@ -4,6 +4,7 @@ import Engine from '../engine'
 
 const _colorsBG = ['#FF0000', '#0000FF', '#FFFF00', '#00FF00', '#FF00FF', '#00FFFF'];
 const _colorsFG = ['#FFFFFF', '#FFFFFF', '#000000', '#000000', '#000000', '#000000'];
+
 const _rowStyles = ['order:0;padding:2px 3px 0px 3px', 'order:1;padding:2px 3px 2px 3px'];
 
 
@@ -55,13 +56,21 @@ const _class = {
 
 // _createPattern(oLevel)
 function _createPattern(oLevel) {
+	let iLast = -1;
 	let oRet = {real:[], vis:[]};
 
 	for (let i = 0; i < oLevel.count; ++i) {
-		let iIndex = Engine.randomInt(0, _colorsBG.length - 1)
-		let iTaps = Engine.randomInt(1, 3);
+		let iIndex;
+		let iRnd = Engine.randomInt(1, 100);
+		let iTaps = iRnd <= 40 ? 2 : (iTaps <= 60 ? 1 : 3);
 
+		do {
+			iIndex = Engine.randomInt(0, _colorsBG.length - 1);
+		} while (iIndex === iLast);
+
+		iLast = iIndex;
 		oRet.vis.push({index:iIndex, taps:iTaps});
+
 		for (let i = 0; i < iTaps; ++i) {
 			oRet.real.push(iIndex);
 		}
@@ -162,5 +171,6 @@ export default function(iIndex, fSignal) {
 		update(iCounter) {
 
 		}
+		
 	};
 }
